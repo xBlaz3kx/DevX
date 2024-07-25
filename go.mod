@@ -9,16 +9,12 @@ require (
 	github.com/eclipse/paho.golang v0.20.0
 	github.com/eclipse/paho.mqtt.golang v1.4.3
 	github.com/fvbock/endless v0.0.0-20170109170031-447134032cb6
-	github.com/geraldo-labs/merge-struct v1.0.0
-	github.com/gin-contrib/zap v0.2.0
+	github.com/gin-contrib/zap v1.1.3
 	github.com/gin-gonic/gin v1.10.0
 	github.com/go-playground/validator/v10 v10.20.0
 	github.com/google/uuid v1.6.0
 	github.com/grafana/otel-profiling-go v0.5.1
 	github.com/grafana/pyroscope-go v1.1.1
-	github.com/mitchellh/mapstructure v1.5.0
-	github.com/ory/keto-client-go v0.11.0-alpha.0
-	github.com/ory/kratos-client-go v1.0.0
 	github.com/pkg/errors v0.9.1
 	github.com/samber/lo v1.39.0
 	github.com/spf13/viper v1.18.2
@@ -30,7 +26,6 @@ require (
 	go.mongodb.org/mongo-driver v1.14.0
 	go.opencensus.io v0.24.0
 	go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin v0.48.0
-	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.48.0
 	go.opentelemetry.io/contrib/propagators/b3 v1.23.0
 	go.opentelemetry.io/contrib/propagators/jaeger v1.23.0
 	go.opentelemetry.io/otel v1.23.1
@@ -41,7 +36,7 @@ require (
 	go.opentelemetry.io/otel/sdk v1.23.1
 	go.opentelemetry.io/otel/sdk/metric v1.23.1
 	go.opentelemetry.io/otel/trace v1.23.1
-	go.uber.org/zap v1.26.0
+	go.uber.org/zap v1.27.0
 	google.golang.org/grpc v1.61.0
 	google.golang.org/protobuf v1.34.1
 )
@@ -65,8 +60,6 @@ require (
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/fatih/color v1.14.1 // indirect
-	github.com/fatih/structs v1.1.0 // indirect
-	github.com/felixge/httpsnoop v1.0.4 // indirect
 	github.com/fsnotify/fsnotify v1.7.0 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.3 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
@@ -104,6 +97,7 @@ require (
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
+	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/montanaflynn/stats v0.0.0-20171201202039-1bf9dbcd8cbe // indirect

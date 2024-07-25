@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package common;
+
+option go_package = "./proto";
+
+enum ErrorCode {
+  CannotSend = 0;
+  PayloadError = 1;
+  InterceptorError = 2;
+  ApplicationError = 3;
+}
+
+message Error {
+  ErrorCode Code = 1;
+  string Message = 2;
+}

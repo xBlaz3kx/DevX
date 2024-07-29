@@ -1,8 +1,10 @@
 package http
 
 import (
+	"net/http/httptest"
 	"testing"
 
+	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -108,4 +110,36 @@ func TestParseQueryFields(t *testing.T) {
 		assert.Equal(t, tst.out.fieldsMap, fieldsMap)
 		assert.Equal(t, tst.out.errorOut, err)
 	}
+}
+
+func TestAddPaginationToContext(t *testing.T) {
+	engine := gin.New()
+
+	w := httptest.NewRecorder()
+	requestContext := gin.CreateTestContextOnly(w, engine)
+
+	req := httptest.NewRequest("GET", "/?offset=10&limit=20", nil)
+	requestContext.Request = req
+
+	ctx := AddPaginationToContext(requestContext)
+
+	offset := ctx.Value("offset")
+	limit := ctx.Value("limit")
+
+	assert.Equal(t, "10", offset)
+	assert.Equal(t, "20", limit)
+
+	// No query params with offset and limit
+	recorder := httptest.NewRecorder()
+	newReqContext := gin.CreateTestContextOnly(recorder, engine)
+	req = httptest.NewRequest("GET", "/?some_other_example=10&leemit=20", nil)
+	newReqContext.Request = req
+
+	newCtx := AddPaginationToContext(newReqContext)
+
+	offset = newCtx.Value("offset")
+	limit = newCtx.Value("limit")
+
+	assert.Empty(t, offset)
+	assert.Empty(t, limit)
 }

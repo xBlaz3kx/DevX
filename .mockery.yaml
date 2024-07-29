@@ -1,0 +1,10 @@
+with-expecter: True
+dir: mocks/{{ replaceAll .InterfaceDirRelative "internal" "internal_" }}
+mockname: "Mock{{.InterfaceName}}"
+outpkg: "{{.PackageName}}"
+filename: "{{.InterfaceName}}Mock.go"
+all: True
+packages:
+  github.com/xBlaz3kx/DevX:
+    config:
+      recursive: True

@@ -27,11 +27,11 @@ func NewMetrics(ctx context.Context, info ServiceInfo, config MetricsConfig) (*M
 		otlpmetricgrpc.WithEndpoint(config.Address),
 	}
 
-	if !config.TLS.IsEnabled {
-		options = append(options, otlpmetricgrpc.WithInsecure())
+	if config.TLS.IsEnabled {
+		// todo
+		options = append(options, otlpmetricgrpc.WithTLSCredentials(nil))
 	} else {
-		// TODO: TLS
-		// options = append(options, otlpmetricgrpc.WithTLSClientConfig())
+		options = append(options, otlpmetricgrpc.WithInsecure())
 	}
 
 	conn, err := connectToBackend(ctx, config.Address)
@@ -95,12 +95,8 @@ func NewMetrics(ctx context.Context, info ServiceInfo, config MetricsConfig) (*M
 
 func connectToBackend(ctx context.Context, address string) (*grpc.ClientConn, error) {
 	opts := []grpc.DialOption{
-		grpc.WithBlock(),
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	}
 
-	dialContext, cancel := context.WithTimeout(ctx, time.Second*10)
-	defer cancel()
-
-	return grpc.DialContext(dialContext, address, opts...)
+	return grpc.NewClient(address, opts...)
 }

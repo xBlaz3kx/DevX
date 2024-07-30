@@ -29,7 +29,9 @@ func NewHeader() *Header {
 }
 
 func (rh *Header) WithError(err bool) *Header {
-	rh.header = append(rh.header, HeaderValue{Key: HeaderKeyError, Value: err})
+	if err == true {
+		rh.header = append(rh.header, HeaderValue{Key: HeaderKeyError, Value: err})
+	}
 	return rh
 }
 

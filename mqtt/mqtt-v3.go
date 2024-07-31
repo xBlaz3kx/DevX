@@ -58,7 +58,7 @@ func NewMqttClient(clientSettings Configuration, obs observability.Observability
 	opts.SetMaxReconnectInterval(time.Second * 5)
 
 	// Set TLS settings (required by AWS)
-	opts.SetTLSConfig(createTlsConfiguration(obs, clientSettings.TLS))
+	opts.SetTLSConfig(createTlsConfiguration(obs.Log(), clientSettings.TLS))
 
 	opts.SetOnConnectHandler(func(client mqtt.Client) {
 		obs.Log().Info("Connected to broker")
@@ -133,7 +133,7 @@ func (c *clientImpl) SubscribeToAny(topic Topic, handler MessageHandler) {
 		}
 
 		// Parse the topic and get the Ids based on the original topic.
-		ids, err := GetIdsFromTopic(c.obs, message.Topic(), topic)
+		ids, err := GetIdsFromTopic(c.obs.Log(), message.Topic(), topic)
 		if err != nil {
 			logInfo.Sugar().Errorf("Error getting the topic info: %v", err)
 			return

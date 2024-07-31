@@ -42,8 +42,6 @@ jobs:
   # Run unit tests
   tests:
     name: "Run unit tests"
-    needs:
-      - generate-mocks
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

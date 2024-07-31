@@ -7,9 +7,9 @@ import (
 	"os"
 	"strings"
 
+	"github.com/GLCharge/otelzap"
 	"github.com/agrison/go-commons-lang/stringUtils"
 	"github.com/xBlaz3kx/DevX/configuration"
-	"github.com/xBlaz3kx/DevX/observability"
 	"go.uber.org/zap"
 )
 
@@ -27,8 +27,8 @@ var (
 // subscription topic = some/+/subscription/+/topic
 // should return ["exampleId1", "exampleId2"]
 // If the topic are not the same length or don't contain the same words, it will return an error
-func GetIdsFromTopic(obs observability.Observability, actualTopic string, subTopic Topic) ([]string, error) {
-	obs.Log().With(
+func GetIdsFromTopic(logger *otelzap.Logger, actualTopic string, subTopic Topic) ([]string, error) {
+	logger.With(
 		zap.String("actualTopic", actualTopic),
 		zap.String("originalTopic", string(subTopic)),
 	).Debug("Getting Ids from topic")
@@ -61,8 +61,8 @@ func GetIdsFromTopic(obs observability.Observability, actualTopic string, subTop
 }
 
 // CreateTopicWithIds replaces all the + sign in a topic used for subscription with ids. Works only if the number of pluses is matches the number of ids.
-func CreateTopicWithIds(obs observability.Observability, topicTemplate Topic, ids ...string) (string, error) {
-	obs.Log().With(
+func CreateTopicWithIds(logger *otelzap.Logger, topicTemplate Topic, ids ...string) (string, error) {
+	logger.With(
 		zap.String("topic", string(topicTemplate)),
 		zap.Strings("ids", ids),
 	).Debug("Creating publish topic")
@@ -87,10 +87,10 @@ func CreateTopicWithIds(obs observability.Observability, topicTemplate Topic, id
 }
 
 // createTlsConfiguration Create a TLS cert using the private key and certificate
-func createTlsConfiguration(obs observability.Observability, tlsSettings configuration.TLS) *tls.Config {
+func createTlsConfiguration(logger *otelzap.Logger, tlsSettings configuration.TLS) *tls.Config {
 	clientCert, err := tls.LoadX509KeyPair(tlsSettings.CertificatePath, tlsSettings.PrivateKeyPath)
 	if err != nil {
-		obs.Log().Sugar().Fatalf("invalid key pair: %v", err)
+		logger.Sugar().Fatalf("invalid key pair: %v", err)
 	}
 
 	rootCAs, _ := x509.SystemCertPool()
@@ -101,11 +101,11 @@ func createTlsConfiguration(obs observability.Observability, tlsSettings configu
 	// Read in the cert file
 	certs, err := os.ReadFile(tlsSettings.RootCertificatePath)
 	if err != nil {
-		obs.Log().Sugar().Fatalf("Failed to append to RootCAs: %v", err)
+		logger.Sugar().Fatalf("Failed to append to RootCAs: %v", err)
 	}
 
 	if !rootCAs.AppendCertsFromPEM(certs) {
-		obs.Log().Sugar().Error("No certs appended, using system certs only")
+		logger.Sugar().Error("No certs appended, using system certs only")
 	}
 
 	return &tls.Config{

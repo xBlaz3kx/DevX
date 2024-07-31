@@ -46,7 +46,7 @@ func TestGetConfiguration(t *testing.T) {
 
 func TestGetConfiguration_NotLoaded(t *testing.T) {
 	getExampleConfig := exampleConfiguration{}
-	GetConfiguration(viper.GetViper(), &getExampleConfig)
+	GetConfiguration(viper.New(), &getExampleConfig)
 
 	assert.Empty(t, getExampleConfig)
 }

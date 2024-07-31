@@ -20,25 +20,6 @@ on:
   workflow_dispatch:
 
 jobs:
-
-  # Generate mocks
-  generate-mocks:
-    name: "Generate mocks"
-    runs-on: ubuntu-latest
-    container: vektra/mockery:v2.38.0
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Generate mocks
-        run: |
-          mockery --all
-
-      - name: Commit mocks
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "[Gen] Generated mocks"
-
   # Run unit tests
   tests:
     name: "Run unit tests"

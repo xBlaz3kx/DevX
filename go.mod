@@ -21,7 +21,7 @@ require (
 	github.com/stretchr/testify v1.9.0
 	github.com/tavsec/gin-healthcheck v1.6.2
 	github.com/uptrace/opentelemetry-go-extra/otelutil v0.2.3
-	github.com/vearne/gin-timeout v0.1.7
+	github.com/vearne/gin-timeout v0.2.0
 	github.com/wagslane/go-rabbitmq v0.13.0
 	go.mongodb.org/mongo-driver v1.15.0
 	go.opencensus.io v0.24.0

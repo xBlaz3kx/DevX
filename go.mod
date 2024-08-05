@@ -22,7 +22,7 @@ require (
 	github.com/tavsec/gin-healthcheck v1.6.2
 	github.com/uptrace/opentelemetry-go-extra/otelutil v0.2.3
 	github.com/vearne/gin-timeout v0.1.7
-	github.com/wagslane/go-rabbitmq v0.13.0
+	github.com/wagslane/go-rabbitmq v0.14.2
 	go.mongodb.org/mongo-driver v1.15.0
 	go.opencensus.io v0.24.0
 	go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin v0.53.0
@@ -109,7 +109,7 @@ require (
 	github.com/oapi-codegen/runtime v1.0.0 // indirect
 	github.com/pelletier/go-toml/v2 v2.2.2 // indirect
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
-	github.com/rabbitmq/amqp091-go v1.7.0 // indirect
+	github.com/rabbitmq/amqp091-go v1.10.0 // indirect
 	github.com/redis/go-redis/v9 v9.5.3 // indirect
 	github.com/sagikazarmark/crypt v0.19.0 // indirect
 	github.com/sagikazarmark/locafero v0.4.0 // indirect

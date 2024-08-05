@@ -5,7 +5,7 @@ go 1.21.1
 require (
 	github.com/GLCharge/otelzap v0.0.0-20230904131944-57dc7c9994a9
 	github.com/agrison/go-commons-lang v0.0.0-20240106075236-2e001e6401ef
-	github.com/aws/aws-sdk-go v1.55.3
+	github.com/aws/aws-sdk-go v1.55.5
 	github.com/eclipse/paho.golang v0.20.0
 	github.com/eclipse/paho.mqtt.golang v1.4.3
 	github.com/fvbock/endless v0.0.0-20170109170031-447134032cb6
@@ -21,7 +21,7 @@ require (
 	github.com/stretchr/testify v1.9.0
 	github.com/tavsec/gin-healthcheck v1.6.2
 	github.com/uptrace/opentelemetry-go-extra/otelutil v0.2.3
-	github.com/vearne/gin-timeout v0.1.7
+	github.com/vearne/gin-timeout v0.2.0
 	github.com/wagslane/go-rabbitmq v0.13.0
 	go.mongodb.org/mongo-driver v1.16.0
 	go.opencensus.io v0.24.0

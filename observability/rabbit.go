@@ -11,12 +11,12 @@ import (
 )
 
 const (
-	rabbitMessagesPublishedTotal    = "spectre_rabbit_messages_published_total"
-	rabbitMessagesDeliveredTotal    = "spectre_rabbit_messages_delivered_total"
-	rabbitMessagesAcknowledgedTotal = "spectre_rabbit_messages_acknowledged_total"
-	rabbitMessagesRequeuedTotal     = "spectre_rabbit_messages_requeued_total"
-	rabbitMessagesRejectedTotal     = "spectre_rabbit_messages_rejected_total"
-	rabbitConsumersTotal            = "spectre_rabbit_consumers_total"
+	rabbitMessagesPublishedTotal    = "rabbit_messages_published_total"
+	rabbitMessagesDeliveredTotal    = "rabbit_messages_delivered_total"
+	rabbitMessagesAcknowledgedTotal = "rabbit_messages_acknowledged_total"
+	rabbitMessagesRequeuedTotal     = "rabbit_messages_requeued_total"
+	rabbitMessagesRejectedTotal     = "rabbit_messages_rejected_total"
+	rabbitConsumersTotal            = "rabbit_consumers_total"
 
 	attrQueueName = "queue_name"
 )
@@ -152,6 +152,7 @@ func (m *Metrics) IncrementMessagesDiscarded(queueName string) {
 	)
 }
 
+// todo underlying implementation should use metrics package instead?
 func (m *Metrics) IncrementConsumers(queueName string) {
 	if m == nil {
 		return

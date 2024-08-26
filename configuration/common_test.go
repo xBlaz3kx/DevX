@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"os"
+	"path/filepath"
 	"testing"
 
 	"github.com/spf13/viper"
@@ -112,8 +113,13 @@ func TestInitConfig(t *testing.T) {
 	require.NoError(t, err)
 
 	// Test default values
-	_ = os.Mkdir("./test123", 0755)
-	err = writeToFile("./test123/test.yaml", testCfg)
+	dir, err := os.MkdirTemp(".", "test")
+	require.NoError(t, err)
+
+	testFileName := filepath.Join(dir, "test.yaml")
+	err = writeToFile(testFileName, testCfg)
+	defer os.RemoveAll(dir)
+
 	require.NoError(t, err)
 
 	assert.NotPanics(t, func() {

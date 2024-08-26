@@ -47,15 +47,12 @@ func newPublisherPool(publishers []Publisher, replyPool ReplyPool, exchange Exch
 
 // Start starts the PublisherPool routine
 func (pp *PublisherPool) start() {
-	for {
-		select {
-		case req := <-pp.request:
-			req.ResponseChannel <- pp.publishers[pp.roundRobin].Publish(req.Ctx, string(req.Topic), req.Message, req.CorrelationId, pp.replyTopic, req.Options...)
-			if pp.roundRobin == len(pp.publishers)-1 {
-				pp.roundRobin = 0
-			} else {
-				pp.roundRobin++
-			}
+	for req := range pp.request {
+		req.ResponseChannel <- pp.publishers[pp.roundRobin].Publish(req.Ctx, string(req.Topic), req.Message, req.CorrelationId, pp.replyTopic, req.Options...)
+		if pp.roundRobin == len(pp.publishers)-1 {
+			pp.roundRobin = 0
+		} else {
+			pp.roundRobin++
 		}
 	}
 }

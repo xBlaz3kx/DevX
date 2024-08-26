@@ -59,7 +59,7 @@ func New(configuration Configuration, serviceExchange Exchange, obs observabilit
 	options := newRabbitOptions()
 
 	// Setup the logger
-	optionFuncts = append(optionFuncts)
+	// optionFuncts = append(optionFuncts)
 
 	// Apply options
 	for _, optionFunc := range optionFuncts {

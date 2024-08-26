@@ -83,10 +83,10 @@ func NewObservability(ctx context.Context, info ServiceInfo, config Config) (*Im
 
 // Gracefully shutdown observability components
 func (obs *Impl) Shutdown(ctx context.Context) {
-	obs.logging.Shutdown()
+	_ = obs.logging.Shutdown()
 
 	if !util.IsNilInterfaceOrPointer(obs.tracing) {
-		obs.tracing.Shutdown(ctx)
+		_ = obs.tracing.Shutdown(ctx)
 	}
 
 	if !util.IsNilInterfaceOrPointer(obs.profiling) {

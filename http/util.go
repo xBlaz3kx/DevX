@@ -15,7 +15,9 @@ var ErrInvalidFieldsQuery = errors.New("Invalid fields query")
 // AddPaginationToContext adds the pagination parameters to the context
 func AddPaginationToContext(ctx *gin.Context) context.Context {
 	reqCtx := ctx.Request.Context()
+	// nolint:all
 	reqCtx = context.WithValue(reqCtx, "offset", ctx.Query("offset"))
+	// nolint:all
 	reqCtx = context.WithValue(reqCtx, "limit", ctx.Query("limit"))
 	return reqCtx
 }

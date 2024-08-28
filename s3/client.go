@@ -280,6 +280,7 @@ func (i *ClientImpl) FileExistsInPublicBucket(ctx context.Context, filename stri
 }
 
 func (i *ClientImpl) GetFileURLWithExpiry(ctx context.Context, filename string, duration time.Duration) (string, error) {
+	// nolint:all
 	ctx, end := i.obs.Span(ctx, "s3.GetFileURLWithExpiry", zap.String("fileName", filename))
 	defer end()
 

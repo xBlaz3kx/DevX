@@ -36,5 +36,5 @@ func (p *Profiling) Shutdown() {
 	if p == nil {
 		return
 	}
-	p.profiler.Stop()
+	_ = p.profiler.Stop()
 }

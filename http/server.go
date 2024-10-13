@@ -1,11 +1,11 @@
 package http
 
 import (
+	"context"
 	"errors"
 	"net/http"
 	"time"
 
-	"github.com/fvbock/endless"
 	ginzap "github.com/gin-contrib/zap"
 	"github.com/gin-gonic/gin"
 	healthcheck "github.com/tavsec/gin-healthcheck"
@@ -48,6 +48,7 @@ type (
 type Server struct {
 	config Configuration
 	router *gin.Engine
+	server *http.Server
 	obs    observability.Observability
 }
 
@@ -122,18 +123,22 @@ func (s *Server) Run(checks ...checks.Check) {
 		return
 	}
 
-	// Check if HTTPS is enabled
-	if s.config.TLS.IsEnabled {
-		err = endless.ListenAndServeTLS(s.config.Address, s.config.TLS.PrivateKeyPath, s.config.TLS.CertificatePath, s.router)
-		if !errors.Is(err, http.ErrServerClosed) {
-			s.obs.Log().With(zap.Error(err)).Panic("Cannot serve the API")
-		}
-		return
-	}
+	s.server = &http.Server{Addr: s.config.Address, Handler: s.router}
 
-	// Serve the API
-	err = endless.ListenAndServe(s.config.Address, s.router)
-	if !errors.Is(err, http.ErrServerClosed) {
-		s.obs.Log().With(zap.Error(err)).Panic("Cannot serve the API")
+	go func() {
+		if err := s.server.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
+			s.obs.Log().Panic("HTTP server failed to start", zap.Error(err))
+		}
+	}()
+}
+
+// Shutdown stops the HTTP server gracefully
+func (s *Server) Shutdown() {
+	s.obs.Log().Info("Shutting down the HTTP server")
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	if err := s.server.Shutdown(ctx); err != nil {
+		s.obs.Log().Error("HTTP server shutdown failed", zap.Error(err))
 	}
 }

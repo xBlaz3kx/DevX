@@ -8,7 +8,6 @@ import (
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 	"github.com/xBlaz3kx/DevX/observability"
-	"go.opencensus.io/trace"
 	"go.uber.org/zap"
 )
 
@@ -57,8 +56,9 @@ func NewMqttClient(clientSettings Configuration, obs observability.Observability
 	opts.SetCleanSession(true)
 	opts.SetMaxReconnectInterval(time.Second * 5)
 
-	// Set TLS settings (required by AWS)
-	opts.SetTLSConfig(createTlsConfiguration(obs.Log(), clientSettings.TLS))
+	if clientSettings.TLS.IsEnabled {
+		opts.SetTLSConfig(createTlsConfiguration(obs.Log(), clientSettings.TLS))
+	}
 
 	opts.SetOnConnectHandler(func(client mqtt.Client) {
 		obs.Log().Info("Connected to broker")
@@ -77,7 +77,7 @@ func NewMqttClient(clientSettings Configuration, obs observability.Observability
 	return &clientImpl{
 		mqttClient: client,
 		id:         clientSettings.ClientId,
-		obs:        obs.WithSpanKind(trace.SpanKindClient),
+		obs:        obs,
 	}
 }
 

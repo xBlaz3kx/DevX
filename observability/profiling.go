@@ -32,9 +32,10 @@ func NewProfiler(name string, config ProfilingConfig) (*Profiling, error) {
 	}, nil
 }
 
-func (p *Profiling) Shutdown() {
+func (p *Profiling) Shutdown() error {
 	if p == nil {
-		return
+		return nil
 	}
-	_ = p.profiler.Stop()
+
+	return p.profiler.Stop()
 }

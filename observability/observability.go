@@ -10,7 +10,9 @@ import (
 	"github.com/uptrace/opentelemetry-go-extra/otelutil"
 	"github.com/xBlaz3kx/DevX/util"
 	"go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
+	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/metric"
 	"go.opentelemetry.io/otel/trace"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -24,12 +26,13 @@ type Impl struct {
 	tracing   *Tracing
 	profiling *Profiling
 	metrics   *Metrics
+	metric.MeterProvider
 
 	spanKind trace.SpanKind
 }
 
 type Observability interface {
-	Shutdown(ctx context.Context)
+	Shutdown(ctx context.Context) error
 	Span(ctx context.Context, spanName string, fields ...zap.Field) (context.Context, func())
 	LogSpan(ctx context.Context, spanName string, fields ...zap.Field) (context.Context, func(), otelzap.LoggerWithCtx)
 	LogSpanWithTimeout(ctx context.Context, spanName string, timeout time.Duration, fields ...zap.Field) (context.Context, func(), otelzap.LoggerWithCtx)
@@ -76,22 +79,29 @@ func NewObservability(ctx context.Context, info ServiceInfo, config Config) (*Im
 		}
 		obs.Log().Info("Metrics enabled")
 
+		obs.MeterProvider = otel.GetMeterProvider()
 	}
 
 	return &obs, nil
 }
 
-// Gracefully shutdown observability components
-func (obs *Impl) Shutdown(ctx context.Context) {
-	_ = obs.logging.Shutdown()
-
+// Shutdown Gracefully shutdown observability components
+func (obs *Impl) Shutdown(ctx context.Context) error {
 	if !util.IsNilInterfaceOrPointer(obs.tracing) {
-		_ = obs.tracing.Shutdown(ctx)
+		err := obs.tracing.Shutdown(ctx)
+		if err != nil {
+			return err
+		}
 	}
 
 	if !util.IsNilInterfaceOrPointer(obs.profiling) {
-		obs.profiling.Shutdown()
+		err := obs.profiling.Shutdown()
+		if err != nil {
+			return err
+		}
 	}
+
+	return obs.logging.Shutdown()
 }
 
 // Span creates a new span

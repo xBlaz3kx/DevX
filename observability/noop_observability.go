@@ -17,7 +17,8 @@ func NewNoopObservability() Observability {
 type noopObservability struct {
 }
 
-func (n *noopObservability) Shutdown(ctx context.Context) {
+func (n *noopObservability) Shutdown(ctx context.Context) error {
+	return nil
 }
 
 func (n *noopObservability) Span(ctx context.Context, spanName string, fields ...zap.Field) (context.Context, func()) {

@@ -5,8 +5,8 @@ import (
 
 	"github.com/pkg/errors"
 	"github.com/tavsec/gin-healthcheck/checks"
-	"github.com/xBlaz3kx/DevX/configuration"
 	"github.com/xBlaz3kx/DevX/observability"
+	"github.com/xBlaz3kx/DevX/tls"
 )
 
 const (
@@ -16,12 +16,12 @@ const (
 
 // Configuration is the configuration for the MQTT client
 type Configuration struct {
-	Version  string            `yaml:"version"`
-	Address  string            `validate:"required,url" json:"address" yaml:"address"`
-	Username string            `yaml:"username"`
-	Password string            `yaml:"password"`
-	ClientId string            `validate:"required" yaml:"clientId"`
-	TLS      configuration.TLS `validate:"required" yaml:"tls"`
+	Version  string  `yaml:"version"`
+	Address  string  `validate:"required,url" json:"address" yaml:"address"`
+	Username string  `yaml:"username"`
+	Password string  `yaml:"password"`
+	ClientId string  `validate:"required" yaml:"clientId"`
+	TLS      tls.TLS `validate:"required" yaml:"tls"`
 }
 
 type Handler func(client Client, topicIds []string, payloadId uint16, payload interface{}, err error)

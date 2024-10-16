@@ -3,9 +3,7 @@ package mqtt
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"net/url"
-	"os"
 
 	mqtt "github.com/eclipse/paho.golang/autopaho"
 	"github.com/eclipse/paho.golang/paho"
@@ -13,93 +11,74 @@ import (
 	"go.uber.org/zap"
 )
 
-type (
-	HandlerV5 func(client ClientV5, topicIds []string, payloadId uint16, payload interface{}, err error)
-
-	// ClientV5 is an interface wrapper for a simple MQTT client.
-	ClientV5 interface {
-		Connect(ctx context.Context)
-		Disconnect()
-		Publish(ctx context.Context, topic Topic, message interface{}) error
-		SubscribeWithId(ctx context.Context, topic Topic, handler HandlerV5)
-		Subscribe(ctx context.Context, topic Topic, handler HandlerV5)
-	}
-
-	// V5Impl concrete implementation of the ClientV5, which is essentially a wrapper over the mqtt lib.
-	V5Impl struct {
-		mqttClient *mqtt.ConnectionManager
-		brokerUrl  *url.URL
-		clientId   string
-		obs        observability.Observability
-	}
-)
-
-// NewMqttV5Client creates a wrapped mqtt ClientV5 with specific settings.
-func NewMqttV5Client(clientSettings Configuration, obs observability.Observability) ClientV5 {
-	obs.Log().Info("Creating a new MQTT client..")
-	broker := fmt.Sprintf("tcp://%s", clientSettings.Address)
-	clientId, _ := os.Hostname()
-	parse, err := url.Parse(broker)
-	if err != nil {
-		return nil
-	}
-
-	return &V5Impl{
-		mqttClient: nil,
-		brokerUrl:  parse,
-		clientId:   clientId,
-		obs:        obs,
-	}
+// mqttV5 concrete implementation of the ClientV5, which is essentially a wrapper over the mqtt lib.
+type mqttV5 struct {
+	mqttClient *mqtt.ConnectionManager
+	brokerUrl  *url.URL
+	clientId   string
+	obs        observability.Observability
 }
 
-func (c *V5Impl) Connect(ctx context.Context) {
+// NewV5Client creates a wrapped mqtt ClientV5 with specific settings.
+func NewV5Client(clientSettings Configuration, obs observability.Observability) (Client, error) {
+	obs.Log().Info("Creating a new MQTT client..")
+
+	parse, err := url.Parse(clientSettings.Address)
+	if err != nil {
+		return nil, err
+	}
+
+	return &mqttV5{
+		mqttClient: nil,
+		brokerUrl:  parse,
+		clientId:   clientSettings.ClientId,
+		obs:        obs,
+	}, nil
+}
+
+func (c *mqttV5) Connect(ctx context.Context) error {
 	c.obs.Log().Debug("Connecting to the broker")
 
-	cliCfg := mqtt.ClientConfig{
-		BrokerUrls:        []*url.URL{c.brokerUrl},
-		KeepAlive:         10,
-		ConnectRetryDelay: 3,
+	clientConfig := mqtt.ClientConfig{
+		BrokerUrls: []*url.URL{c.brokerUrl},
+		KeepAlive:  10,
 		OnConnectionUp: func(cm *mqtt.ConnectionManager, connAck *paho.Connack) {
-			fmt.Println("mqtt connected to broker")
+			c.obs.Log().Debug("Client connected to broker")
 		},
-		OnConnectError: func(err error) { fmt.Printf("error whilst attempting connection: %s\n", err) },
+		OnConnectError: func(err error) { c.obs.Log().With(zap.Error(err)).Debug("error whilst attempting connection") },
 		ClientConfig: paho.ClientConfig{
 			ClientID:      c.clientId,
-			OnClientError: func(err error) { fmt.Printf("server requested disconnect: %s\n", err) },
+			OnClientError: func(err error) { c.obs.Log().With(zap.Error(err)).Error("server requested disconnect") },
 			OnServerDisconnect: func(d *paho.Disconnect) {
 				if d.Properties != nil {
-					fmt.Printf("server requested disconnect: %s\n", d.Properties.ReasonString)
-				} else {
-					fmt.Printf("server requested disconnect; reason code: %d\n", d.ReasonCode)
+					c.obs.Log().With(zap.String("reason", d.Properties.ReasonString)).Error("server requested disconnect: %s\n")
 				}
 			},
 		},
 	}
 
-	ctx, cancel := context.WithCancel(ctx)
-	defer cancel()
-
-	cm, err := mqtt.NewConnection(ctx, cliCfg)
+	cm, err := mqtt.NewConnection(ctx, clientConfig)
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	c.mqttClient = cm
+	return nil
 }
 
-func (c *V5Impl) Disconnect() {
+func (c *mqttV5) Disconnect(ctx context.Context) error {
 	c.obs.Log().Debug("Disconnecting the MQTT client")
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
 
 	err := c.mqttClient.Disconnect(ctx)
 	if err != nil {
-		return
+		return err
 	}
+
+	return nil
 }
 
 // Publish a new message to a topic
-func (c *V5Impl) Publish(ctx context.Context, topic Topic, message interface{}) error {
+func (c *mqttV5) Publish(ctx context.Context, topic Topic, message interface{}) error {
 	logInfo := c.obs.Log().With(
 		zap.String("topic", string(topic)),
 		zap.Any("message", message),
@@ -111,15 +90,11 @@ func (c *V5Impl) Publish(ctx context.Context, topic Topic, message interface{}) 
 		return err
 	}
 
-	ctx, cancel := context.WithCancel(ctx)
-	defer cancel()
-
 	publishMessage := paho.Publish{
 		QoS:     0,
 		Retain:  false,
 		Topic:   topic.String(),
 		Payload: payload,
-
 		Properties: &paho.PublishProperties{
 			CorrelationData:        nil,
 			ContentType:            "application/json",
@@ -137,14 +112,11 @@ func (c *V5Impl) Publish(ctx context.Context, topic Topic, message interface{}) 
 }
 
 // Subscribe to a topic
-func (c *V5Impl) Subscribe(ctx context.Context, topic Topic, handler HandlerV5) {
+func (c *mqttV5) Subscribe(ctx context.Context, topic Topic, handler Handler) error {
 	logInfo := c.obs.Log().With(
-		zap.String("topic", string(topic)),
+		zap.String("topic", topic.String()),
 	)
 	logInfo.Debug("Subscribing to a topic")
-
-	ctx, cancel := context.WithCancel(ctx)
-	defer cancel()
 
 	subscribe := paho.Subscribe{
 		Properties: &paho.SubscribeProperties{
@@ -154,13 +126,30 @@ func (c *V5Impl) Subscribe(ctx context.Context, topic Topic, handler HandlerV5) 
 		Subscriptions: nil,
 	}
 
-	_, _ = c.mqttClient.Subscribe(ctx, &subscribe)
+	_, err := c.mqttClient.Subscribe(ctx, &subscribe)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // SubscribeWithId to a topic
-func (c *V5Impl) SubscribeWithId(ctx context.Context, topic Topic, handler HandlerV5) {
+func (c *mqttV5) SubscribeWithId(ctx context.Context, topic Topic, handler Handler) {
 	logInfo := c.obs.Log().With(
 		zap.String("topic", string(topic)),
 	)
 	logInfo.Debug("Subscribing to a topic")
+}
+
+func (c *mqttV5) GetId() string {
+	return c.clientId
+}
+
+func (c *mqttV5) Pass() bool {
+	return true
+}
+
+func (c *mqttV5) Name() string {
+	return "mqtt-v5"
 }

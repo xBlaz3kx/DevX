@@ -1,8 +1,8 @@
 package mqtt
 
 import (
+	"context"
 	"encoding/json"
-	"fmt"
 	"strings"
 	"time"
 
@@ -11,41 +11,18 @@ import (
 	"go.uber.org/zap"
 )
 
-type (
-	Topic string
-
-	MessageHandler func(client Client, topicIds []string, payloadId uint16, payload interface{}, err error)
-
-	// Client is an interface wrapper for a simple MQTT client.
-	Client interface {
-		Connect()
-		Disconnect()
-		Publish(topic Topic, message interface{}) error
-		Subscribe(topic Topic, handler MessageHandler)
-		SubscribeToAny(topic Topic, handler MessageHandler)
-		GetId() string
-	}
-
-	// clientImpl concrete implementation of the Client, which is essentially a wrapper over the mqtt lib.
-	clientImpl struct {
-		mqttClient mqtt.Client
-		id         string
-		obs        observability.Observability
-	}
-)
-
-func (t Topic) String() string {
-	return string(t)
+// mqttV3 concrete implementation of the Client, which is essentially a wrapper over the mqtt lib.
+type mqttV3 struct {
+	obs        observability.Observability
+	mqttClient mqtt.Client
+	id         string
 }
 
-// NewMqttClient creates a wrapped mqtt Client with specific settings.
-func NewMqttClient(clientSettings Configuration, obs observability.Observability) Client {
-	obs.Log().Info("Creating a new MQTT client ...")
-	broker := fmt.Sprintf("tcps://%s", clientSettings.Address)
-
+// NewV3Client creates a wrapped mqtt Client with specific settings.
+func NewV3Client(clientSettings Configuration, obs observability.Observability) (Client, error) {
 	// Basic client settings
 	opts := mqtt.NewClientOptions()
-	opts.AddBroker(broker)
+	opts.AddBroker(clientSettings.Address)
 	opts.SetClientID(clientSettings.ClientId)
 	opts.SetUsername(clientSettings.Username)
 	opts.SetPassword(clientSettings.Password)
@@ -74,31 +51,33 @@ func NewMqttClient(clientSettings Configuration, obs observability.Observability
 
 	// Connect to the MQTT broker
 	client := mqtt.NewClient(opts)
-	return &clientImpl{
+	return &mqttV3{
 		mqttClient: client,
 		id:         clientSettings.ClientId,
 		obs:        obs,
-	}
+	}, nil
 }
 
-func (c *clientImpl) Connect() {
+func (c *mqttV3) Connect(_ context.Context) error {
 	c.obs.Log().Debug("Connecting to the MQTT broker")
 	c.mqttClient.Connect().Wait()
+	return nil
 }
 
-func (c *clientImpl) Disconnect() {
+func (c *mqttV3) Disconnect(_ context.Context) error {
 	c.obs.Log().Debug("Disconnecting the MQTT client")
 	c.mqttClient.Disconnect(100)
+	return nil
 }
 
-func (c *clientImpl) GetId() string {
+func (c *mqttV3) GetId() string {
 	return c.id
 }
 
 // Publish a new message to a topic
-func (c *clientImpl) Publish(topic Topic, message interface{}) error {
+func (c *mqttV3) Publish(_ context.Context, topic Topic, message interface{}) error {
 	logInfo := c.obs.Log().With(
-		zap.String("topic", string(topic)),
+		zap.String("topic", topic.String()),
 		zap.Any("message", message),
 	)
 	logInfo.Debug("Publishing a message to topic")
@@ -117,18 +96,22 @@ func (c *clientImpl) Publish(topic Topic, message interface{}) error {
 	return nil
 }
 
-// SubscribeToAny to a topic
-func (c *clientImpl) SubscribeToAny(topic Topic, handler MessageHandler) {
+// SubscribeWithId to a topic
+func (c *mqttV3) SubscribeWithId(_ context.Context, topic Topic, handler Handler) {
 	logInfo := c.obs.Log().With(zap.String("topic", string(topic)))
 	logInfo.Debug("Subscribing to a topic")
 
 	token := c.mqttClient.Subscribe(topic.String(), 1, func(client mqtt.Client, message mqtt.Message) {
 		var data interface{}
 
+		// todo support other types of messages
 		// Transform the payload to the object and pass it to the handler function for further processing
 		err := json.Unmarshal(message.Payload(), &data)
 		if err != nil {
 			logInfo.Sugar().Errorf("Error parsing the data: %v", err)
+
+			// Invoke handler with error
+			handler(c, nil, message.MessageID(), nil, err)
 			return
 		}
 
@@ -136,6 +119,9 @@ func (c *clientImpl) SubscribeToAny(topic Topic, handler MessageHandler) {
 		ids, err := GetIdsFromTopic(c.obs.Log(), message.Topic(), topic)
 		if err != nil {
 			logInfo.Sugar().Errorf("Error getting the topic info: %v", err)
+
+			// Invoke handler with error
+			handler(c, nil, message.MessageID(), nil, err)
 			return
 		}
 
@@ -151,7 +137,7 @@ func (c *clientImpl) SubscribeToAny(topic Topic, handler MessageHandler) {
 }
 
 // Subscribe to a topic
-func (c *clientImpl) Subscribe(topic Topic, handler MessageHandler) {
+func (c *mqttV3) Subscribe(_ context.Context, topic Topic, handler Handler) error {
 	logInfo := c.obs.Log().With(zap.String("topic", string(topic)))
 	logInfo.Debug("Subscribing to a topic")
 
@@ -175,4 +161,13 @@ func (c *clientImpl) Subscribe(topic Topic, handler MessageHandler) {
 			c.obs.Log().Warn("Token error", zap.Error(token.Error()))
 		}
 	}(token)
+	return nil
+}
+
+func (c *mqttV3) Pass() bool {
+	return c.mqttClient.IsConnected()
+}
+
+func (c *mqttV3) Name() string {
+	return "mqtt-client-v3"
 }

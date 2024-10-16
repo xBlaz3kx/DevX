@@ -13,6 +13,12 @@ import (
 	"go.uber.org/zap"
 )
 
+type Topic string
+
+func (t Topic) String() string {
+	return string(t)
+}
+
 var (
 	ErrNotValidSubscriptionTopic = fmt.Errorf("not a valid subscription topic")
 	ErrNotSameTopic              = fmt.Errorf("not the same topic")

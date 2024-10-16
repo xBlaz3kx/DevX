@@ -38,8 +38,9 @@ type Observability interface {
 	LogSpanWithTimeout(ctx context.Context, spanName string, timeout time.Duration, fields ...zap.Field) (context.Context, func(), otelzap.LoggerWithCtx)
 	Log() *otelzap.Logger
 	Metrics() *Metrics
-	SetupHttpMiddleware(router *gin.Engine)
+	SetupGinMiddleware(router *gin.Engine)
 	WithSpanKind(spanKind trace.SpanKind) *Impl
+	metric.MeterProvider
 }
 
 func NewObservability(ctx context.Context, info ServiceInfo, config Config) (*Impl, error) {
@@ -113,16 +114,7 @@ func (obs *Impl) Span(ctx context.Context, spanName string, fields ...zap.Field)
 	endSpan := func() {}
 
 	if obs.config.Tracing.Enabled {
-		attrs := make([]attribute.KeyValue, len(fields))
-
-		enc := zapcore.NewMapObjectEncoder()
-		for _, field := range fields {
-			field.AddTo(enc)
-		}
-
-		for k, v := range enc.Fields {
-			attrs = append(attrs, otelutil.Attribute(k, v))
-		}
+		attrs := otelAttributesFromZapFields(fields)
 
 		var span trace.Span
 		ctx, span = obs.tracing.Tracer().Start(ctx, spanName, trace.WithAttributes(attrs...), trace.WithSpanKind(obs.spanKind))
@@ -132,6 +124,20 @@ func (obs *Impl) Span(ctx context.Context, spanName string, fields ...zap.Field)
 	}
 
 	return ctx, endSpan
+}
+
+func otelAttributesFromZapFields(fields []zap.Field) []attribute.KeyValue {
+	attrs := make([]attribute.KeyValue, len(fields))
+
+	enc := zapcore.NewMapObjectEncoder()
+	for _, field := range fields {
+		field.AddTo(enc)
+	}
+
+	for k, v := range enc.Fields {
+		attrs = append(attrs, otelutil.Attribute(k, v))
+	}
+	return attrs
 }
 
 // LogSpan creates a new span with the given name and fields and logs the span and trace id fields
@@ -178,8 +184,8 @@ func (obs *Impl) Metrics() *Metrics {
 	return obs.metrics
 }
 
-// SetupHttpMiddleware adds middleware to the gin router based on the observability configuration
-func (obs *Impl) SetupHttpMiddleware(router *gin.Engine) {
+// SetupGinMiddleware adds middleware to the Gin router based on the observability configuration
+func (obs *Impl) SetupGinMiddleware(router *gin.Engine) {
 	if obs == nil {
 		return
 	}

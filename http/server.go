@@ -13,37 +13,21 @@ import (
 	"github.com/tavsec/gin-healthcheck/config"
 	timeout "github.com/vearne/gin-timeout"
 	"github.com/xBlaz3kx/DevX/observability"
+	"github.com/xBlaz3kx/DevX/tls"
 	"go.uber.org/zap"
 )
 
-type (
-	// Http configuration for the API with TLS settings
-	Configuration struct {
-		// Address is the address of the HTTP server
-		Address string `yaml:"address" json:"address" mapstructure:"address"`
+// Http configuration for the API with TLS settings
+type Configuration struct {
+	// Address is the address of the HTTP server
+	Address string `yaml:"address" json:"address" mapstructure:"address"`
 
-		// PathPrefix is the prefix for the endpoints
-		PathPrefix string `yaml:"pathPrefix" json:"pathPrefix" mapstructure:"pathPrefix"`
+	// PathPrefix is the prefix for the endpoints
+	PathPrefix string `yaml:"pathPrefix" json:"pathPrefix" mapstructure:"pathPrefix"`
 
-		// TLS is the TLS configuration for the HTTP server
-		TLS TLS `mapstructure:"tls" yaml:"tls" json:"tls"`
-	}
-
-	// TLS configuration with the option to enable/disable and with paths to the certificates
-	TLS struct {
-		// IsEnabled is the flag to enable/disable TLS
-		IsEnabled bool `yaml:"enabled" json:"enabled,omitempty" mapstructure:"enabled"`
-
-		// RootCertificatePath is the path to the root certificate
-		RootCertificatePath string `yaml:"rootCaPath" json:"rootCaPath,omitempty" mapstructure:"rootCaPath"`
-
-		// CertificatePath is the path to the certificate
-		CertificatePath string `yaml:"certPath" json:"certPath,omitempty" mapstructure:"certPath"`
-
-		// PrivateKeyPath is the path to the private key
-		PrivateKeyPath string `yaml:"keyPath" json:"keyPath,omitempty" mapstructure:"keyPath"`
-	}
-)
+	// TLS is the TLS configuration for the HTTP server
+	TLS tls.TLS `mapstructure:"tls" yaml:"tls" json:"tls"`
+}
 
 type Server struct {
 	config Configuration
@@ -62,7 +46,7 @@ func NewServer(config Configuration, obs observability.Observability, optionFunc
 		optionFunc(options)
 	}
 
-	obs.SetupHttpMiddleware(router)
+	obs.SetupGinMiddleware(router)
 
 	router.NoRoute(func(context *gin.Context) {
 		context.JSON(http.StatusNotFound, ErrorPayload{
@@ -126,6 +110,12 @@ func (s *Server) Run(checks ...checks.Check) {
 	s.server = &http.Server{Addr: s.config.Address, Handler: s.router}
 
 	go func() {
+		if s.config.TLS.IsEnabled {
+			if err := s.server.ListenAndServeTLS(s.config.TLS.CertificatePath, s.config.TLS.PrivateKeyPath); err != nil && !errors.Is(err, http.ErrServerClosed) {
+				s.obs.Log().Panic("HTTP server failed to start", zap.Error(err))
+			}
+		}
+
 		if err := s.server.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
 			s.obs.Log().Panic("HTTP server failed to start", zap.Error(err))
 		}

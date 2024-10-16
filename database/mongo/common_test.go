@@ -1,35 +1,11 @@
-// nolint:all
-package util
+package mongo
 
 import (
-	"context"
 	"reflect"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
-
-func TestGetPaginationOptsFromContext(t *testing.T) {
-	baseCtx := context.Background()
-	ctx := context.WithValue(baseCtx, "limit", "10")
-	ctx = context.WithValue(ctx, "offset", "10")
-
-	limit, offset := GetPaginationOptsFromContext(ctx)
-	assert.Equal(t, 10, limit)
-	assert.Equal(t, 10, offset)
-
-	ctx = context.WithValue(ctx, "limit", "20")
-	ctx = context.WithValue(ctx, "offset", "10")
-
-	limit, offset = GetPaginationOptsFromContext(ctx)
-	assert.Equal(t, 20, limit)
-	assert.Equal(t, 10, offset)
-
-	limit, offset = GetPaginationOptsFromContext(context.Background())
-	assert.Equal(t, 30, limit)
-	assert.Equal(t, 0, offset)
-}
 
 func TestStringToObjectId(t *testing.T) {
 	// Test valid input

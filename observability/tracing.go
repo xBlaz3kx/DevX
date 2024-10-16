@@ -23,6 +23,18 @@ type Tracing struct {
 	tracer         trace.Tracer
 }
 
+func (t *Tracing) Tracer() trace.Tracer {
+	return t.tracer
+}
+
+func (t *Tracing) TracerProvider() trace.TracerProvider {
+	return t.tracerProvider
+}
+
+func (t *Tracing) Shutdown(ctx context.Context) error {
+	return t.tracerProvider.Shutdown(ctx)
+}
+
 // createNewExporter creates a new OTel over GRPC exporter.
 func createNewExporter(ctx context.Context, config TracingConfig) (*otlptrace.Exporter, error) {
 	conn, err := connectToBackend(ctx, config.Address)
@@ -66,12 +78,11 @@ func NewTracing(ctx context.Context, info ServiceInfo, config TracingConfig) (*T
 	}
 
 	tracerProvider := sdktrace.NewTracerProvider(
-		sdktrace.WithSampler(sdktrace.AlwaysSample()),
 		sdktrace.WithResource(res),
 		sdktrace.WithSpanProcessor(bsp),
 	)
 
-	// Set the global provider with profiler
+	// Set the global provider
 	otel.SetTracerProvider(otelpyroscope.NewTracerProvider(tracerProvider))
 
 	otel.SetTextMapPropagator(propagation.NewCompositeTextMapPropagator(
@@ -87,12 +98,4 @@ func NewTracing(ctx context.Context, info ServiceInfo, config TracingConfig) (*T
 		tracerProvider: tracerProvider,
 		tracer:         tracer,
 	}, nil
-}
-
-func (t *Tracing) Tracer() trace.Tracer {
-	return t.tracer
-}
-
-func (t *Tracing) Shutdown(ctx context.Context) error {
-	return t.tracerProvider.Shutdown(ctx)
 }

@@ -28,7 +28,6 @@ func NewMetrics(ctx context.Context, info ServiceInfo, config MetricsConfig) (*M
 	}
 
 	if config.TLS.IsEnabled {
-		// todo
 		options = append(options, otlpmetricgrpc.WithTLSCredentials(nil))
 	} else {
 		options = append(options, otlpmetricgrpc.WithInsecure())

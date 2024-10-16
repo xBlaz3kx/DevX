@@ -1,5 +1,7 @@
 package observability
 
+import "github.com/xBlaz3kx/DevX/tls"
+
 const (
 	LogLevelDebug LogLevel = "debug"
 	LogLevelInfo  LogLevel = "info"
@@ -25,17 +27,17 @@ type (
 
 	// TracingConfig configures the tracing for the application (over OpenTelemetry GRPC).
 	TracingConfig struct {
-		Enabled bool   `json:"enabled" yaml:"enabled" mapstructure:"enabled"`
-		Address string `json:"address,omitempty" yaml:"address" mapstructure:"address"`
-		TLS     TLS    `json:"tls" yaml:"tls" mapstructure:"tls"`
+		Enabled bool    `json:"enabled" yaml:"enabled" mapstructure:"enabled"`
+		Address string  `json:"address,omitempty" yaml:"address" mapstructure:"address"`
+		TLS     tls.TLS `json:"tls" yaml:"tls" mapstructure:"tls"`
 	}
 
 	// MetricsConfig configures the metrics for the application (over OpenTelemetry GRPC).
 	MetricsConfig struct {
-		Enabled      bool   `json:"enabled" yaml:"enabled" mapstructure:"enabled"`
-		Address      string `json:"address,omitempty" yaml:"address" mapstructure:"address"`
-		TLS          TLS    `json:"tls" yaml:"tls" mapstructure:"tls"`
-		PushInterval int64  `json:"pushInterval,omitempty" yaml:"pushInterval" mapstructure:"pushInterval"`
+		Enabled      bool    `json:"enabled" yaml:"enabled" mapstructure:"enabled"`
+		Address      string  `json:"address,omitempty" yaml:"address" mapstructure:"address"`
+		TLS          tls.TLS `json:"tls" yaml:"tls" mapstructure:"tls"`
+		PushInterval int64   `json:"pushInterval,omitempty" yaml:"pushInterval" mapstructure:"pushInterval"`
 	}
 
 	ProfilingConfig struct {
@@ -47,20 +49,5 @@ type (
 	ServiceInfo struct {
 		Name    string
 		Version string
-	}
-
-	// TLS configuration with the option to enable/disable and with paths to the certificates
-	TLS struct {
-		// IsEnabled is the flag to enable/disable TLS
-		IsEnabled bool `yaml:"enabled" json:"enabled,omitempty" mapstructure:"enabled"`
-
-		// RootCertificatePath is the path to the root certificate
-		RootCertificatePath string `yaml:"rootCaPath" json:"rootCaPath,omitempty" mapstructure:"rootCaPath"`
-
-		// CertificatePath is the path to the certificate
-		CertificatePath string `yaml:"certPath" json:"certPath,omitempty" mapstructure:"certPath"`
-
-		// PrivateKeyPath is the path to the private key
-		PrivateKeyPath string `yaml:"keyPath" json:"keyPath,omitempty" mapstructure:"keyPath"`
 	}
 )

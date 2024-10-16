@@ -6,6 +6,8 @@ import (
 
 	"github.com/GLCharge/otelzap"
 	"github.com/gin-gonic/gin"
+	"go.opentelemetry.io/otel/metric"
+	metricsdk "go.opentelemetry.io/otel/sdk/metric"
 	"go.opentelemetry.io/otel/trace"
 	"go.uber.org/zap"
 )
@@ -15,6 +17,12 @@ func NewNoopObservability() Observability {
 }
 
 type noopObservability struct {
+	metricsdk.MeterProvider
+}
+
+func (n *noopObservability) Meter(name string, opts ...metric.MeterOption) metric.Meter {
+	// Potentially dangerous, but we don't care about metrics in this case
+	return nil
 }
 
 func (n *noopObservability) Shutdown(ctx context.Context) error {
@@ -41,7 +49,7 @@ func (n *noopObservability) Metrics() *Metrics {
 	return &Metrics{}
 }
 
-func (n *noopObservability) SetupHttpMiddleware(router *gin.Engine) {
+func (n *noopObservability) SetupGinMiddleware(router *gin.Engine) {
 }
 
 func (n *noopObservability) WithSpanKind(spanKind trace.SpanKind) *Impl {

@@ -10,6 +10,7 @@ import (
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"github.com/xBlaz3kx/DevX/tls"
 )
 
 type exampleConfiguration struct {
@@ -26,7 +27,7 @@ func TestGetConfiguration(t *testing.T) {
 			Organization: "example",
 			Bucket:       "example",
 			AccessToken:  "accessToken",
-			TLS: TLS{
+			TLS: tls.TLS{
 				IsEnabled: false,
 			},
 		},

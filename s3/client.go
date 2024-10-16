@@ -13,8 +13,8 @@ import (
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	"github.com/google/uuid"
-	"github.com/xBlaz3kx/DevX/configuration"
 	"github.com/xBlaz3kx/DevX/observability"
+	"github.com/xBlaz3kx/DevX/tls"
 	"go.opentelemetry.io/otel/trace"
 	"go.uber.org/zap"
 )
@@ -74,7 +74,7 @@ type Configuration struct {
 	ForcePathStyle bool `yaml:"forcePathStyle" json:"forcePathStyle" mapstructure:"forcePathStyle"`
 
 	// TLS is the TLS configuration for the Configuration connection.
-	TLS configuration.TLS `mapstructure:"tls" yaml:"tls" json:"tls"`
+	TLS tls.TLS `mapstructure:"tls" yaml:"tls" json:"tls"`
 }
 
 func (c Configuration) ToAWSConfig() *aws.Config {

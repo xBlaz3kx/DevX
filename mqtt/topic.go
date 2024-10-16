@@ -1,15 +1,11 @@
 package mqtt
 
 import (
-	"crypto/tls"
-	"crypto/x509"
 	"fmt"
-	"os"
 	"strings"
 
 	"github.com/GLCharge/otelzap"
 	"github.com/agrison/go-commons-lang/stringUtils"
-	"github.com/xBlaz3kx/DevX/configuration"
 	"go.uber.org/zap"
 )
 
@@ -90,35 +86,4 @@ func CreateTopicWithIds(logger *otelzap.Logger, topicTemplate Topic, ids ...stri
 	}
 
 	return finalString, nil
-}
-
-// createTlsConfiguration Create a TLS cert using the private key and certificate
-func createTlsConfiguration(logger *otelzap.Logger, tlsSettings configuration.TLS) *tls.Config {
-	clientCert, err := tls.LoadX509KeyPair(tlsSettings.CertificatePath, tlsSettings.PrivateKeyPath)
-	if err != nil {
-		logger.Sugar().Fatalf("invalid key pair: %v", err)
-	}
-
-	rootCAs, _ := x509.SystemCertPool()
-	if rootCAs == nil {
-		rootCAs = x509.NewCertPool()
-	}
-
-	// Read in the cert file
-	certs, err := os.ReadFile(tlsSettings.RootCertificatePath)
-	if err != nil {
-		logger.Sugar().Fatalf("Failed to append to RootCAs: %v", err)
-	}
-
-	if !rootCAs.AppendCertsFromPEM(certs) {
-		logger.Sugar().Error("No certs appended, using system certs only")
-	}
-
-	return &tls.Config{
-		InsecureSkipVerify: true,
-		RootCAs:            rootCAs,
-		Certificates: []tls.Certificate{
-			clientCert,
-		},
-	}
 }

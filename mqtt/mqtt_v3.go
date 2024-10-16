@@ -33,8 +33,14 @@ func NewV3Client(clientSettings Configuration, obs observability.Observability) 
 	opts.SetCleanSession(true)
 	opts.SetMaxReconnectInterval(time.Second * 5)
 
+	// Append certs if enabled
 	if clientSettings.TLS.IsEnabled {
-		opts.SetTLSConfig(createTlsConfiguration(obs.Log(), clientSettings.TLS))
+		tlsSettings, err := clientSettings.TLS.ToTlsConfig()
+		if err != nil {
+			return nil, err
+		}
+
+		opts.SetTLSConfig(tlsSettings)
 	}
 
 	opts.SetOnConnectHandler(func(client mqtt.Client) {

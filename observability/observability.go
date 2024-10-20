@@ -194,7 +194,11 @@ func (obs *Impl) SetupGinMiddleware(router *gin.Engine) {
 	obsServer.spanKind = trace.SpanKindServer
 
 	if obsServer.config.Tracing.Enabled {
-		router.Use(otelgin.Middleware(obsServer.info.Name))
+		router.Use(otelgin.Middleware(
+			obsServer.info.Name,
+			otelgin.WithTracerProvider(obsServer.tracing.TracerProvider()),
+			otelgin.WithGinFilter(healthFilter),
+		))
 	}
 
 	if obsServer.config.Metrics.Enabled {
@@ -221,4 +225,12 @@ func (obs *Impl) WithSpanKind(spanKind trace.SpanKind) *Impl {
 	o := obs.clone()
 	o.spanKind = spanKind
 	return o
+}
+
+// healthFilter is a Gin filter that excludes health checks from tracing
+func healthFilter(c *gin.Context) bool {
+	if c.Request.URL.Path == "/healthz" {
+		return false
+	}
+	return true
 }

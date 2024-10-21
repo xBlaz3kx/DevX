@@ -6,6 +6,7 @@ import (
 
 	otelpyroscope "github.com/grafana/otel-profiling-go"
 	"github.com/pkg/errors"
+	"github.com/xBlaz3kx/DevX/tls"
 	"go.opentelemetry.io/contrib/propagators/b3"
 	"go.opentelemetry.io/contrib/propagators/jaeger"
 	"go.opentelemetry.io/otel"
@@ -17,6 +18,13 @@ import (
 	semconv "go.opentelemetry.io/otel/semconv/v1.4.0"
 	"go.opentelemetry.io/otel/trace"
 )
+
+// TracingConfig configures the tracing for the application (over OpenTelemetry GRPC).
+type TracingConfig struct {
+	Enabled bool    `json:"enabled" yaml:"enabled" mapstructure:"enabled"`
+	Address string  `json:"address,omitempty" yaml:"address" mapstructure:"address"`
+	TLS     tls.TLS `json:"tls" yaml:"tls" mapstructure:"tls"`
+}
 
 type Tracing struct {
 	tracerProvider *sdktrace.TracerProvider

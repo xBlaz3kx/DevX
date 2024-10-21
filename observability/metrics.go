@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/pkg/errors"
+	"github.com/xBlaz3kx/DevX/tls"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetricgrpc"
 	metricsdk "go.opentelemetry.io/otel/sdk/metric"
@@ -14,12 +15,18 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
+// MetricsConfig configures the metrics for the application (over OpenTelemetry GRPC).
+type MetricsConfig struct {
+	Enabled      bool    `json:"enabled" yaml:"enabled" mapstructure:"enabled"`
+	Address      string  `json:"address,omitempty" yaml:"address" mapstructure:"address"`
+	TLS          tls.TLS `json:"tls" yaml:"tls" mapstructure:"tls"`
+	PushInterval int64   `json:"pushInterval,omitempty" yaml:"pushInterval" mapstructure:"pushInterval"`
+}
+
 type Metrics struct {
 	http   httpMetrics
 	rabbit rabbitMetrics
 }
-
-type ServiceMetrics interface{}
 
 // NewMetrics Creates a new metrics instance
 func NewMetrics(ctx context.Context, info ServiceInfo, config MetricsConfig) (*Metrics, error) {

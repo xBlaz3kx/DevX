@@ -5,6 +5,12 @@ import (
 	"github.com/pkg/errors"
 )
 
+type ProfilingConfig struct {
+	Enabled   bool   `json:"enabled" yaml:"enabled" mapstructure:"enabled"`
+	Address   string `json:"address,omitempty" yaml:"address" mapstructure:"address"`
+	AuthToken string `json:"authToken,omitempty" yaml:"authToken" mapstructure:"authToken"`
+}
+
 type Profiling struct {
 	profiler *pyroscope.Profiler
 }

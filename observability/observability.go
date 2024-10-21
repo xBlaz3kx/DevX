@@ -18,6 +18,19 @@ import (
 	"go.uber.org/zap/zapcore"
 )
 
+type ServiceInfo struct {
+	Name    string
+	Version string
+}
+
+// Config configures logs, traces and metrics for the application
+type Config struct {
+	Tracing   TracingConfig   `json:"tracing" yaml:"tracing" mapstructure:"tracing"`
+	Metrics   MetricsConfig   `json:"metrics" yaml:"metrics" mapstructure:"metrics"`
+	Logging   LogConfig       `json:"logging" yaml:"logging" mapstructure:"logging"`
+	Profiling ProfilingConfig `json:"profiling" yaml:"profiling" mapstructure:"profiling"`
+}
+
 type Impl struct {
 	config Config
 	info   ServiceInfo

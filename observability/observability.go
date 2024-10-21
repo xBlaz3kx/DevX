@@ -242,8 +242,5 @@ func (obs *Impl) WithSpanKind(spanKind trace.SpanKind) *Impl {
 
 // healthFilter is a Gin filter that excludes health checks from tracing
 func healthFilter(c *gin.Context) bool {
-	if c.Request.URL.Path == "/healthz" {
-		return false
-	}
-	return true
+	return c.Request.URL.Path != "/healthz"
 }

@@ -1,6 +1,7 @@
 package observability
 
 import (
+	"context"
 	"os"
 
 	"github.com/GLCharge/otelzap"
@@ -88,7 +89,7 @@ func NewLogging(config LogConfig) *Logging {
 	)
 
 	if config.OtelLogger != nil {
-		exporter, err := otlploggrpc.New(nil,
+		exporter, err := otlploggrpc.New(context.Background(),
 			otlploggrpc.WithEndpoint(config.OtelLogger.Address),
 			otlploggrpc.WithInsecure(),
 		)

@@ -4,6 +4,8 @@ import (
 	"context"
 	"errors"
 	"net/http"
+	"regexp"
+	"sync"
 	"time"
 
 	ginzap "github.com/gin-contrib/zap"
@@ -16,6 +18,8 @@ import (
 	"github.com/xBlaz3kx/DevX/tls"
 	"go.uber.org/zap"
 )
+
+var once sync.Once
 
 // Http configuration for the API with TLS settings
 type Configuration struct {
@@ -45,6 +49,14 @@ func NewServer(config Configuration, obs observability.Observability, optionFunc
 	for _, optionFunc := range optionFuncs {
 		optionFunc(options)
 	}
+
+	once.Do(func() {
+		gin.DebugPrintFunc = func(format string, values ...interface{}) {
+			// Remove newlines and tabs from the format string
+			regex := regexp.MustCompile(`[\n\t]`)
+			logger.Sugar().Debugf(regex.ReplaceAllString(format, ""), values...)
+		}
+	})
 
 	obs.SetupGinMiddleware(router)
 

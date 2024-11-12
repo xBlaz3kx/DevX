@@ -6,11 +6,14 @@ import (
 
 	grpc_zap "github.com/grpc-ecosystem/go-grpc-middleware/logging/zap"
 	grpc_recovery "github.com/grpc-ecosystem/go-grpc-middleware/recovery"
+	"github.com/xBlaz3kx/DevX/observability"
+	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/health"
 	"google.golang.org/grpc/health/grpc_health_v1"
+	"google.golang.org/grpc/stats/opentelemetry"
 	"google.golang.org/grpc/status"
 )
 
@@ -19,9 +22,11 @@ type Server struct {
 	server *grpc.Server
 }
 
-func NewServer() *Server {
+func NewServer(obs observability.Observability) *Server {
 	logger := zap.L().Named("grpc-server")
 
+	metricsOption := opentelemetry.ServerOption(opentelemetry.Options{MetricsOptions: opentelemetry.MetricsOptions{MeterProvider: obs}})
+	grpcTracer := grpc.StatsHandler(otelgrpc.NewServerHandler())
 	// Create a GRPC server with recovery and logger interceptor
 	recoveryHandler := func(p any) (err error) {
 		logger.Error("recovered from panic", zap.Any("panic", p), zap.String("stack", string(debug.Stack())))
@@ -29,6 +34,7 @@ func NewServer() *Server {
 	}
 
 	server := grpc.NewServer(
+		grpcTracer,
 		// Logger and recovery unary interceptors
 		grpc.ChainUnaryInterceptor(
 			grpc_zap.UnaryServerInterceptor(logger),
@@ -39,6 +45,7 @@ func NewServer() *Server {
 			grpc_zap.StreamServerInterceptor(logger),
 			grpc_recovery.StreamServerInterceptor(grpc_recovery.WithRecoveryHandler(recoveryHandler)),
 		),
+		metricsOption,
 	)
 
 	// Register the healthcheck

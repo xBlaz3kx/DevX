@@ -53,6 +53,9 @@ type Observability interface {
 	Metrics() *Metrics
 	SetupGinMiddleware(router *gin.Engine)
 	WithSpanKind(spanKind trace.SpanKind) *Impl
+	IsTracingEnabled() bool
+	IsProfilingEnabled() bool
+	AreMetricsEnabled() bool
 	metric.MeterProvider
 }
 
@@ -238,6 +241,18 @@ func (obs *Impl) WithSpanKind(spanKind trace.SpanKind) *Impl {
 	o := obs.clone()
 	o.spanKind = spanKind
 	return o
+}
+
+func (obs *Impl) IsTracingEnabled() bool {
+	return obs.config.Tracing.Enabled
+}
+
+func (obs *Impl) IsProfilingEnabled() bool {
+	return obs.config.Profiling.Enabled
+}
+
+func (obs *Impl) AreMetricsEnabled() bool {
+	return obs.config.Metrics.Enabled
 }
 
 // healthFilter is a Gin filter that excludes health checks from tracing

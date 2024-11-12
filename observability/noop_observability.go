@@ -55,3 +55,15 @@ func (n *noopObservability) SetupGinMiddleware(router *gin.Engine) {
 func (n *noopObservability) WithSpanKind(spanKind trace.SpanKind) *Impl {
 	return &Impl{}
 }
+
+func (n *noopObservability) IsTracingEnabled() bool {
+	return false
+}
+
+func (n *noopObservability) IsProfilingEnabled() bool {
+	return false
+}
+
+func (n *noopObservability) AreMetricsEnabled() bool {
+	return false
+}

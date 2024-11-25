@@ -32,18 +32,18 @@ require (
 	github.com/wagslane/go-rabbitmq v0.14.2
 	go.mongodb.org/mongo-driver v1.17.1
 	go.opentelemetry.io/contrib/bridges/otelzap v0.6.0
-	go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin v0.56.0
+	go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin v0.57.0
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.49.0
-	go.opentelemetry.io/contrib/propagators/b3 v1.31.0
+	go.opentelemetry.io/contrib/propagators/b3 v1.32.0
 	go.opentelemetry.io/contrib/propagators/jaeger v1.31.0
 	go.opentelemetry.io/otel v1.32.0
-	go.opentelemetry.io/otel/exporters/otlp/otlplog/otlploggrpc v0.7.0
+	go.opentelemetry.io/otel/exporters/otlp/otlplog/otlploggrpc v0.8.0
 	go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetricgrpc v1.32.0
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace v1.32.0
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc v1.32.0
 	go.opentelemetry.io/otel/metric v1.32.0
 	go.opentelemetry.io/otel/sdk v1.32.0
-	go.opentelemetry.io/otel/sdk/log v0.7.0
+	go.opentelemetry.io/otel/sdk/log v0.8.0
 	go.opentelemetry.io/otel/sdk/metric v1.32.0
 	go.opentelemetry.io/otel/trace v1.32.0
 	go.uber.org/zap v1.27.0
@@ -62,8 +62,8 @@ require (
 	github.com/Microsoft/go-winio v0.6.2 // indirect
 	github.com/apapsch/go-jsonmerge/v2 v2.0.0 // indirect
 	github.com/armon/go-metrics v0.4.1 // indirect
-	github.com/bytedance/sonic v1.12.3 // indirect
-	github.com/bytedance/sonic/loader v0.2.0 // indirect
+	github.com/bytedance/sonic v1.12.4 // indirect
+	github.com/bytedance/sonic/loader v0.2.1 // indirect
 	github.com/cenkalti/backoff/v4 v4.3.0 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/cloudwego/base64x v0.1.4 // indirect
@@ -83,7 +83,7 @@ require (
 	github.com/fatih/color v1.14.1 // indirect
 	github.com/felixge/httpsnoop v1.0.4 // indirect
 	github.com/fsnotify/fsnotify v1.7.0 // indirect
-	github.com/gabriel-vasile/mimetype v1.4.5 // indirect
+	github.com/gabriel-vasile/mimetype v1.4.6 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/go-logr/logr v1.4.2 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
@@ -115,7 +115,7 @@ require (
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/klauspost/compress v1.17.8 // indirect
-	github.com/klauspost/cpuid/v2 v2.2.8 // indirect
+	github.com/klauspost/cpuid/v2 v2.2.9 // indirect
 	github.com/leodido/go-urn v1.4.0 // indirect
 	github.com/lufia/plan9stats v0.0.0-20211012122336-39d0f177ccd0 // indirect
 	github.com/magiconair/properties v1.8.7 // indirect
@@ -168,7 +168,7 @@ require (
 	go.etcd.io/etcd/client/v3 v3.5.12 // indirect
 	go.opencensus.io v0.24.0 // indirect
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.49.0 // indirect
-	go.opentelemetry.io/otel/log v0.7.0 // indirect
+	go.opentelemetry.io/otel/log v0.8.0 // indirect
 	go.opentelemetry.io/proto/otlp v1.3.1 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	golang.org/x/arch v0.11.0 // indirect

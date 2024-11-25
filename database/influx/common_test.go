@@ -21,25 +21,29 @@ func TestPaginationFromCtx(t *testing.T) {
 			offset: defaultOffset,
 		},
 		{
-			name:   "Limit and offset in context",
+			name: "Limit and offset in context",
+			//nolint: staticcheck
 			ctx:    context.WithValue(context.WithValue(context.Background(), "limit", "10"), "offset", "3"),
 			limit:  10,
 			offset: 3,
 		},
 		{
-			name:   "Limit in context",
+			name: "Limit in context",
+			//nolint: staticcheck
 			ctx:    context.WithValue(context.Background(), "limit", "10"),
 			limit:  10,
 			offset: defaultOffset,
 		},
 		{
-			name:   "Offset in context",
+			name: "Offset in context",
+			//nolint: staticcheck
 			ctx:    context.WithValue(context.Background(), "offset", "10"),
 			limit:  defaultLimit,
 			offset: 10,
 		},
 		{
-			name:   "Limit more than 100",
+			name: "Limit more than 100",
+			//nolint: staticcheck
 			ctx:    context.WithValue(context.Background(), "limit", "101"),
 			limit:  maxLimit,
 			offset: defaultOffset,

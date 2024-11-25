@@ -8,6 +8,7 @@ import (
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/metric"
+	"go.opentelemetry.io/otel/trace"
 )
 
 type httpMetrics struct {
@@ -57,7 +58,7 @@ func newHttpMetrics() (metrics httpMetrics, err error) {
 }
 
 // Middleware returns a gin middleware that records metrics for each HTTP request.
-func (m *Metrics) Middleware() func(c *gin.Context) {
+func (m *Metrics) Middleware(tracingEnabled bool) func(c *gin.Context) {
 	return func(c *gin.Context) {
 		if m == nil {
 			c.Next()
@@ -73,6 +74,19 @@ func (m *Metrics) Middleware() func(c *gin.Context) {
 			attribute.Int(attrStatus, c.Writer.Status()),
 			attribute.String(attrPath, c.FullPath()),
 			attribute.String(attrMethod, c.Request.Method),
+		}
+
+		if tracingEnabled {
+			span := trace.SpanFromContext(ctx)
+			// Add trace ID and span ID to the metrics if the span is being recorded,
+			// forming an exemplar
+			if span.IsRecording() {
+				attrs = append(
+					attrs,
+					attribute.String("trace_id", span.SpanContext().TraceID().String()),
+					attribute.String("span_id", span.SpanContext().SpanID().String()),
+				)
+			}
 		}
 
 		if c.GetHeader("X-User") != "" {

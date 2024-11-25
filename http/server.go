@@ -26,8 +26,7 @@ type Configuration struct {
 	// Address is the address of the HTTP server
 	Address string `yaml:"address" json:"address" mapstructure:"address"`
 
-	// PathPrefix is the prefix for the endpoints
-	PathPrefix string `yaml:"pathPrefix" json:"pathPrefix" mapstructure:"pathPrefix"`
+	CORS *CORS `yaml:"cors" json:"cors" mapstructure:"cors"`
 
 	// TLS is the TLS configuration for the HTTP server
 	TLS tls.TLS `mapstructure:"tls" yaml:"tls" json:"tls"`

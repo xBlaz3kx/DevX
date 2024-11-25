@@ -218,7 +218,7 @@ func (obs *Impl) SetupGinMiddleware(router *gin.Engine) {
 	}
 
 	if obsServer.config.Metrics.Enabled {
-		router.Use(obsServer.Metrics().Middleware())
+		router.Use(obsServer.Metrics().Middleware(obsServer.config.Tracing.Enabled))
 	}
 }
 

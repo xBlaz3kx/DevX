@@ -80,7 +80,7 @@ func NewObservability(ctx context.Context, info ServiceInfo, config Config) (*Im
 
 	// Setup profiling
 	if config.Profiling.Enabled {
-		obs.profiling, err = NewProfiler(info.Name, config.Profiling)
+		obs.profiling, err = NewProfiler(info.Name, obs.logging.Logger(), config.Profiling)
 		if err != nil {
 			return nil, errors.Wrap(err, "failed to setup profiling")
 		}

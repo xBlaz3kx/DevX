@@ -49,7 +49,7 @@ func (n *noopObservability) Metrics() *Metrics {
 	return &Metrics{}
 }
 
-func (n *noopObservability) SetupGinMiddleware(router *gin.Engine) {
+func (n *noopObservability) SetupGinMiddleware(router *gin.Engine, opts ...MetricMiddlewareOpt) {
 }
 
 func (n *noopObservability) WithSpanKind(spanKind trace.SpanKind) *Impl {

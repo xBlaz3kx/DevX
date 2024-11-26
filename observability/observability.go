@@ -51,7 +51,7 @@ type Observability interface {
 	LogSpanWithTimeout(ctx context.Context, spanName string, timeout time.Duration, fields ...zap.Field) (context.Context, func(), otelzap.LoggerWithCtx)
 	Log() *otelzap.Logger
 	Metrics() *Metrics
-	SetupGinMiddleware(router *gin.Engine)
+	SetupGinMiddleware(router *gin.Engine, opts ...MetricMiddlewareOpt)
 	WithSpanKind(spanKind trace.SpanKind) *Impl
 	IsTracingEnabled() bool
 	IsProfilingEnabled() bool
@@ -201,7 +201,7 @@ func (obs *Impl) Metrics() *Metrics {
 }
 
 // SetupGinMiddleware adds middleware to the Gin router based on the observability configuration
-func (obs *Impl) SetupGinMiddleware(router *gin.Engine) {
+func (obs *Impl) SetupGinMiddleware(router *gin.Engine, opts ...MetricMiddlewareOpt) {
 	if obs == nil {
 		return
 	}
@@ -218,7 +218,7 @@ func (obs *Impl) SetupGinMiddleware(router *gin.Engine) {
 	}
 
 	if obsServer.config.Metrics.Enabled {
-		router.Use(obsServer.Metrics().Middleware(obsServer.config.Tracing.Enabled))
+		router.Use(obsServer.Metrics().Middleware(opts...))
 	}
 }
 

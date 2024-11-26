@@ -26,20 +26,12 @@ func (pb *Publisher) Publish(ctx context.Context, topic string, message proto.Me
 	logger := pb.obs.Log().Ctx(ctx)
 
 	publisherOptions := newPublisherOptions()
-
 	// Apply options
 	for _, optionFunc := range optionFuncs {
 		optionFunc(publisherOptions)
 	}
 
-	// Increment the number of messages published
-	pb.obs.Metrics().IncrementMessagesPublished(ctx, topic)
-
-	headers := InjectRabbitHeaders(ctx)
-
-	for _, hv := range publisherOptions.headers {
-		headers[string(hv.Key)] = hv.Value
-	}
+	headers := getPublisherHeaders(ctx, publisherOptions)
 
 	// Marshall the payload
 	payload, err := proto.Marshal(message)
@@ -73,4 +65,12 @@ func (pb *Publisher) Publish(ctx context.Context, topic string, message proto.Me
 	)
 
 	return nil
+}
+
+func getPublisherHeaders(ctx context.Context, publisherOptions *PublisherOptions) rabbitmq.Table {
+	headers := extractTraceFromContex(ctx)
+	for _, hv := range publisherOptions.headers {
+		headers[string(hv.Key)] = hv.Value
+	}
+	return headers
 }

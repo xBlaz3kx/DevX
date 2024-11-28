@@ -26,7 +26,7 @@ type PublishRequest struct {
 	Topic           Topic
 	CorrelationId   string
 	Message         proto.Message
-	Options         []func(*PublisherOptions)
+	Options         []PublishOpt
 	ResponseChannel chan error
 }
 
@@ -59,7 +59,7 @@ func (pp *PublisherPool) start() {
 
 // Publish publishes a rabbit message
 // Returns an error, only initialize it if needed, error already logged
-func (pp *PublisherPool) Publish(ctx context.Context, topic Topic, message proto.Message, options ...func(*PublisherOptions)) error {
+func (pp *PublisherPool) Publish(ctx context.Context, topic Topic, message proto.Message, options ...PublishOpt) error {
 	correlationId := uuid.New().String()
 	// Create a channel for the response and close it when done
 	errChan := make(chan error, 1)
@@ -91,21 +91,21 @@ func (pp *PublisherPool) Publish(ctx context.Context, topic Topic, message proto
 // Respond publishes a response to a rabbit message
 // Set isError to true if the reply is an error, otherwise pass false to indicate valid response
 // Returns an error, only initialize it if necessary
-func (pp *PublisherPool) Respond(ctx context.Context, correlationID string, topic Topic, message proto.Message, options ...func(*PublisherOptions)) error {
+func (pp *PublisherPool) Respond(ctx context.Context, correlationID string, topic Topic, message proto.Message, options ...PublishOpt) error {
 	return pp.respond(ctx, correlationID, topic, message, false, options...)
 }
 
-func (pp *PublisherPool) RespondWithError(ctx context.Context, correlationID string, topic Topic, message *grpc.Error, options ...func(*PublisherOptions)) error {
+func (pp *PublisherPool) RespondWithError(ctx context.Context, correlationID string, topic Topic, message *grpc.Error, options ...PublishOpt) error {
 	return pp.respond(ctx, correlationID, topic, message, true, options...)
 }
 
 // RespondWithHeader publishes a response to a rabbit message with additional header values.
-func (pp *PublisherPool) respond(ctx context.Context, correlationID string, topic Topic, message proto.Message, isError bool, options ...func(*PublisherOptions)) error {
+func (pp *PublisherPool) respond(ctx context.Context, correlationID string, topic Topic, message proto.Message, isError bool, options ...PublishOpt) error {
 	errChan := make(chan error, 1)
 	defer close(errChan)
 
 	header := NewHeader().WithError(isError).Build()
-	options = append(options, WithHeader(header))
+	options = append(options, WithPublisherHeader(header))
 
 	publishRequest := &PublishRequest{
 		Ctx:             ctx,
@@ -139,7 +139,7 @@ func (pp *PublisherPool) respond(ctx context.Context, correlationID string, topi
 }
 
 // PublishRPC publishes a RPC message and waits for the reply
-func (pp *PublisherPool) PublishRPC(ctx context.Context, topic Topic, message proto.Message, options ...func(options *PublisherOptions)) ([]byte, error) {
+func (pp *PublisherPool) PublishRPC(ctx context.Context, topic Topic, message proto.Message, options ...PublishOpt) ([]byte, error) {
 	replyChannel, err := pp.PublishRPCWithMultipleResponses(ctx, topic, message, 1, options...)
 	if err != nil {
 		return nil, err
@@ -148,7 +148,7 @@ func (pp *PublisherPool) PublishRPC(ctx context.Context, topic Topic, message pr
 	return waitReply(ctx, replyChannel)
 }
 
-func (pp *PublisherPool) PublishRPCWithMultipleResponses(ctx context.Context, topic Topic, message proto.Message, nrResponses int, options ...func(publisherOptions *PublisherOptions)) (chan ReplyResponse, error) {
+func (pp *PublisherPool) PublishRPCWithMultipleResponses(ctx context.Context, topic Topic, message proto.Message, nrResponses int, options ...PublishOpt) (chan ReplyResponse, error) {
 	correlationId := uuid.New().String()
 	// Create a channel for the response and close it when done
 	errChan := make(chan error, 1)

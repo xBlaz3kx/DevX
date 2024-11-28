@@ -13,41 +13,33 @@ import (
 type Publisher struct {
 	Publisher *rabbitmq.Publisher
 	obs       observability.Observability
+	metrics   rabbitMetrics
 }
 
-func newPublisher(publisher *rabbitmq.Publisher, obs observability.Observability) Publisher {
+func newPublisher(publisher *rabbitmq.Publisher, metrics rabbitMetrics, obs observability.Observability) Publisher {
 	return Publisher{
 		Publisher: publisher,
 		obs:       obs.WithSpanKind(trace.SpanKindProducer),
+		metrics:   metrics,
 	}
 }
 
-func (pb *Publisher) Publish(ctx context.Context, topic string, message proto.Message, correlationID string, replyTopic Topic, optionFuncs ...func(*PublisherOptions)) error {
-	logger := pb.obs.Log().Ctx(ctx)
-
-	publisherOptions := newPublisherOptions()
+func (pb *Publisher) Publish(ctx context.Context, topic string, message proto.Message, correlationID string, replyTopic Topic, optionFuncs ...PublishOpt) error {
+	logger := pb.obs.Log().Ctx(ctx).With(zap.String("topic", topic), zap.String("correlationId", correlationID))
 
 	// Apply options
+	publisherOptions := newPublisherOptions()
 	for _, optionFunc := range optionFuncs {
 		optionFunc(publisherOptions)
 	}
 
-	// Increment the number of messages published
-	pb.obs.Metrics().IncrementMessagesPublished(ctx, topic)
-
-	headers := InjectRabbitHeaders(ctx)
-
-	for _, hv := range publisherOptions.headers {
-		headers[string(hv.Key)] = hv.Value
-	}
+	// Get the headers
+	headers := getPublisherHeaders(ctx, publisherOptions)
 
 	// Marshall the payload
 	payload, err := proto.Marshal(message)
 	if err != nil {
-		logger.With(
-			zap.String("topic", topic),
-			zap.String("correlationId", correlationID),
-		).Error("Error marshalling message", zap.Error(err))
+		logger.Error("Error marshalling message", zap.Error(err))
 		return err
 	}
 
@@ -66,11 +58,27 @@ func (pb *Publisher) Publish(ctx context.Context, topic string, message proto.Me
 		return err
 	}
 
-	logger.Debug("Published message",
-		zap.String("topic", topic),
-		zap.String("correlationId", correlationID),
-		zap.Any("headers", headers),
-	)
+	// Increment the number of messages published
+	pb.metrics.IncrementMessagesPublished(topic)
+
+	logger.With(zap.Any("headers", headers)).Debug("Published message")
 
 	return nil
+}
+
+func getPublisherHeaders(ctx context.Context, publisherOptions *PublisherOptions) rabbitmq.Table {
+	headers := make(rabbitmq.Table)
+	for _, hv := range publisherOptions.headers {
+		headers[string(hv.Key)] = hv.Value
+	}
+
+	// Add tracing headers if tracing is enabled
+	if publisherOptions.tracing {
+		traceHeaders := extractTraceFromContex(ctx)
+		for key, value := range traceHeaders {
+			headers[key] = value
+		}
+	}
+
+	return headers
 }

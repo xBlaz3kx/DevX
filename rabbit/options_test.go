@@ -65,17 +65,17 @@ func TestOptionsWithConcurrentReplyConsumer(t *testing.T) {
 func TestPublisherOptionsWithHeader(t *testing.T) {
 	publisherOpts := newPublisherOptions()
 
-	WithHeader([]HeaderValue{})(publisherOpts)
+	WithPublisherHeader([]HeaderValue{})(publisherOpts)
 
 	assert.Equal(t, 0, len(publisherOpts.headers))
 
-	WithHeader([]HeaderValue{{Key: "key", Value: "value"}})(publisherOpts)
+	WithPublisherHeader([]HeaderValue{{Key: "key", Value: "value"}})(publisherOpts)
 	assert.Equal(t, 1, len(publisherOpts.headers))
 	assert.EqualValues(t, "key", publisherOpts.headers[0].Key)
 	assert.EqualValues(t, "value", publisherOpts.headers[0].Value)
 	//assert.IsType(t, HeaderKey{}, publisherOpts.headers[0].Key)
 
-	WithHeader([]HeaderValue{{Key: "key2", Value: "value2"}})(publisherOpts)
+	WithPublisherHeader([]HeaderValue{{Key: "key2", Value: "value2"}})(publisherOpts)
 	assert.Equal(t, 2, len(publisherOpts.headers))
 	assert.EqualValues(t, "key2", publisherOpts.headers[1].Key)
 	assert.EqualValues(t, "value2", publisherOpts.headers[1].Value)

@@ -1,7 +1,6 @@
 package rabbit
 
 import (
-	"fmt"
 	"os"
 	"time"
 
@@ -16,18 +15,12 @@ var ErrResponse = errors.New("responded with an error")
 
 // Configuration AMQP basic configuration for the message bus
 type Configuration struct {
-	// Address is the address for connecting to the RabbitMQ instance
-	Address string `validate:"required" json:"address" yaml:"address"`
-
-	// Username for authentication to the RabbitMQ instance
-	Username string `json:"username" yaml:"username"`
-
-	// Password for authentication to the RabbitMQ instance
-	Password string `json:"password" yaml:"password"`
+	// URL is the address for connecting to the RabbitMQ instance
+	URL string `json:"address" yaml:"address" validate:"required"`
 }
 
 type Rabbit struct {
-	Consumer         Consumer
+	ConsumerFactory  ConsumerFactory
 	Publisher        PublisherPool
 	replyPool        ReplyPool
 	connections      []*rabbitmq.Conn
@@ -37,6 +30,7 @@ type Rabbit struct {
 	Exchange         Exchange
 	replyTopic       Topic
 	obs              observability.Observability
+	metrics          rabbitMetrics
 }
 
 func NewError(errorMessage string, errorCode grpc.ErrorCode) *grpc.Error {
@@ -47,7 +41,7 @@ func NewError(errorMessage string, errorCode grpc.ErrorCode) *grpc.Error {
 }
 
 // New creates and returns a new rabbit client with given configuration
-func New(configuration Configuration, serviceExchange Exchange, obs observability.Observability, optionFuncts ...func(*Options)) (*Rabbit, error) {
+func New(configuration Configuration, serviceExchange Exchange, obs observability.Observability, opts ...func(*Options)) (*Rabbit, error) {
 	// Create reply topic
 	instanceHostname, err := os.Hostname()
 	if err != nil {
@@ -55,15 +49,10 @@ func New(configuration Configuration, serviceExchange Exchange, obs observabilit
 	}
 	replyTopic := NewTopic(serviceExchange).AddWord(replyBase).AddWord(TopicWord(instanceHostname)).Build()
 
-	// Setup defaults
-	options := newRabbitOptions()
-
-	// Setup the logger
-	// optionFuncts = append(optionFuncts)
-
 	// Apply options
-	for _, optionFunc := range optionFuncts {
-		optionFunc(options)
+	options := newRabbitOptions()
+	for _, opt := range opts {
+		opt(options)
 	}
 
 	logger := obs.Log().With(
@@ -74,13 +63,19 @@ func New(configuration Configuration, serviceExchange Exchange, obs observabilit
 	)
 	logger.Debug("Starting Rabbitmq")
 
+	metrics, err := newRabbitMetrics("")
+	if err != nil {
+		return nil, errors.Wrap(err, "failed to create rabbit metrics")
+	}
+
 	client := &Rabbit{
 		options:          options,
 		Exchange:         serviceExchange,
 		replyTopic:       replyTopic,
 		configuration:    configuration,
 		obs:              obs,
-		connectionString: fmt.Sprintf("amqp://%v:%v@%v", configuration.Username, configuration.Password, configuration.Address),
+		connectionString: configuration.URL,
+		metrics:          metrics,
 	}
 
 	// Create a TCP connection for the consumers
@@ -89,15 +84,15 @@ func New(configuration Configuration, serviceExchange Exchange, obs observabilit
 		return nil, err
 	}
 
-	// Create a Consumer
-	client.Consumer = newConsumer(conn, serviceExchange, obs)
+	// Create a ConsumerFactory
+	client.ConsumerFactory = NewConsumerFactory(conn, serviceExchange, metrics, obs)
 
 	// Create a reply pool and start it in a dedicated routine
 	client.replyPool = NewReplyPool(30)
 	go client.replyPool.start()
 
 	// Start a reply consumer
-	_, err = newReplyConsumer(client.Consumer, client.replyPool.Response, replyTopic, options.replyConsumers)
+	_, err = newReplyConsumer(client.ConsumerFactory, client.replyPool.Response, replyTopic)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to create reply consumer")
 	}
@@ -118,7 +113,7 @@ func New(configuration Configuration, serviceExchange Exchange, obs observabilit
 
 // Connect connects the rabbit client to rabbitmq server
 func (c *Rabbit) createConnection() (*rabbitmq.Conn, error) {
-	c.obs.Log().With(zap.String("address", c.configuration.Address)).Debug("Creating a rabbit connection")
+	c.obs.Log().With(zap.String("address", c.configuration.URL)).Debug("Creating a rabbit connection")
 
 	conn, err := rabbitmq.NewConn(c.connectionString, rabbitmq.WithConnectionOptionsReconnectInterval(time.Second))
 	if err != nil {
@@ -147,21 +142,34 @@ func (c *Rabbit) Disconnect() error {
 func (c *Rabbit) createPublishers(number int) ([]Publisher, error) {
 	publishers := []Publisher{}
 
-	for i := 0; i < number; i++ {
-		conn, err := c.createConnection()
-		if err != nil {
-			return nil, err
-		}
+	err := c.createConnectionIfDoesntExist()
+	if err != nil {
+		return publishers, err
+	}
 
+	for i := 0; i < number; i++ {
+		conn := c.connections[0]
 		publisher, err := rabbitmq.NewPublisher(conn, rabbitmq.WithPublisherOptionsLogger(c.options.logger))
 		if err != nil {
 			return nil, err
 		}
 
-		publishers = append(publishers, newPublisher(publisher, c.obs))
+		publishers = append(publishers, newPublisher(publisher, c.metrics, c.obs))
 	}
 
 	return publishers, nil
+}
+
+func (c *Rabbit) createConnectionIfDoesntExist() error {
+	if len(c.connections) == 0 {
+		// Create a connection if there is none
+		_, err := c.createConnection()
+		if err != nil {
+			return errors.Wrap(err, "failed to create connection")
+		}
+	}
+
+	return nil
 }
 
 func (c *Rabbit) Pass() bool {

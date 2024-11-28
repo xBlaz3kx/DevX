@@ -73,19 +73,16 @@ func (rp *ReplyPool) start() {
 }
 
 // NewReplyConsumer creates a new reply queue consumer
-func newReplyConsumer(consumer Consumer, responseChannel chan<- ReplyResponse, topic Topic, routines int) (*TopicConsumer, error) {
-	return consumer.newConsumer(consumer.exchange, topic, string(topic),
-		func(ctx context.Context, d rabbitmq.Delivery) (action rabbitmq.Action) {
-			response := ReplyResponse{
-				CorrelationId: d.CorrelationId,
-				Body:          d.Body,
-				Error:         d.Headers["error"].(bool),
-				Headers:       d.Headers,
-			}
-			responseChannel <- response
-			return rabbitmq.Ack
-		},
-		false,    // Reply queues are not durable as they are made per-instance
-		routines, // Run multiple routines for consumer
+func newReplyConsumer(consumer ConsumerFactory, responseChannel chan<- ReplyResponse, topic Topic) (*rabbitmq.Consumer, error) {
+	return consumer.NewConsumer(consumer.exchange, topic, string(topic), func(ctx context.Context, d rabbitmq.Delivery) (action rabbitmq.Action) {
+		response := ReplyResponse{
+			CorrelationId: d.CorrelationId,
+			Body:          d.Body,
+			Error:         d.Headers["error"].(bool),
+			Headers:       d.Headers,
+		}
+		responseChannel <- response
+		return rabbitmq.Ack
+	}, false, // Reply queues are not durable as they are made per-instance
 	)
 }

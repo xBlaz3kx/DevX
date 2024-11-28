@@ -97,44 +97,45 @@ func newRabbitMetrics(prefix string) (metrics rabbitMetrics, err error) {
 	return
 }
 
-func (m *rabbitMetrics) IncrementMessagesPublished(queueName string) {
+func (m *rabbitMetrics) IncrementMessagesPublished(queueName string, attributes ...attribute.KeyValue) {
 	m.messagesPublished.Add(context.Background(), 1,
 		metric.WithAttributes(attribute.String(attrQueueName, queueName)),
 	)
 }
 
-func (m *rabbitMetrics) IncrementMessagesDelivered(queueName string) {
+func (m *rabbitMetrics) IncrementMessagesDelivered(queueName string, attributes ...attribute.KeyValue) {
 	m.messagesDelivered.Add(context.Background(), 1,
 		metric.WithAttributes(attribute.String(attrQueueName, queueName)),
 	)
 }
 
-func (m *rabbitMetrics) IncrementMessagesAcknowledged(queueName string) {
+func (m *rabbitMetrics) IncrementMessagesAcknowledged(queueName string, attributes ...attribute.KeyValue) {
 	m.messagesAcknowledged.Add(context.Background(), 1,
 		metric.WithAttributes(attribute.String(attrQueueName, queueName)),
 	)
 }
 
-func (m *rabbitMetrics) IncrementMessagesRequeued(queueName string) {
+func (m *rabbitMetrics) IncrementMessagesRequeued(queueName string, attributes ...attribute.KeyValue) {
 	m.messagesRequeued.Add(context.Background(), 1,
 		metric.WithAttributes(attribute.String(attrQueueName, queueName)),
 	)
 }
 
-func (m *rabbitMetrics) IncrementMessagesDiscarded(queueName string) {
+func (m *rabbitMetrics) IncrementMessagesDiscarded(queueName string, attributes ...attribute.KeyValue) {
 	m.messagesRejected.Add(context.Background(), 1,
 		metric.WithAttributes(attribute.String(attrQueueName, queueName)),
 	)
 }
 
-func (m *rabbitMetrics) IncrementConsumers(queueName string) {
+func (m *rabbitMetrics) IncrementConsumers(queueName string, attributes ...attribute.KeyValue) {
 	m.consumers.Record(context.Background(), 1,
 		metric.WithAttributes(attribute.String(attrQueueName, queueName)),
 	)
 }
 
-func (m *rabbitMetrics) DecrementConsumers(queueName string) {
+func (m *rabbitMetrics) DecrementConsumers(queueName string, attributes ...attribute.KeyValue) {
+	attributes = append(attributes, attribute.String(attrQueueName, queueName))
 	m.consumers.Record(context.Background(), 1,
-		metric.WithAttributes(attribute.String(attrQueueName, queueName)),
+		metric.WithAttributes(attributes...),
 	)
 }

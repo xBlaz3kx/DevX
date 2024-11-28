@@ -36,17 +36,3 @@ func WithConcurrentReplyConsumer(number int) func(options *Options) {
 		options.replyConsumers = number
 	}
 }
-
-type PublisherOptions struct {
-	headers []HeaderValue
-}
-
-func newPublisherOptions() *PublisherOptions {
-	return &PublisherOptions{}
-}
-
-func WithHeader(header []HeaderValue) func(options *PublisherOptions) {
-	return func(options *PublisherOptions) {
-		options.headers = append(options.headers, header...)
-	}
-}

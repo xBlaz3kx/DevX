@@ -2,6 +2,7 @@ package tests
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/tavsec/gin-healthcheck/checks"
 	"github.com/testcontainers/testcontainers-go/modules/mongodb"
@@ -9,8 +10,6 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
-
-const DatabaseName = "alpr-cloud"
 
 type MongoContainer struct {
 	client *mongo.Client
@@ -26,18 +25,18 @@ func NewMongoContainer(ctx context.Context) (*MongoContainer, error) {
 	return &MongoContainer{MongoDBContainer: mongodbContainer}, nil
 }
 
-func (c *MongoContainer) CreateClient(ctx context.Context) (*mongo.Client, *checks.MongoCheck, func(), error) {
+func (c *MongoContainer) CreateClient(ctx context.Context, databaseName string) (*mongo.Client, *checks.MongoCheck, func(), error) {
 	// Get the connection string
 	connectionString, err := c.MongoDBContainer.ConnectionString(ctx)
 	if err != nil {
 		return nil, nil, func() {}, err
 	}
 
-	cfg := devxCfg.Database{URI: connectionString, Database: DatabaseName}
+	cfg := devxCfg.Database{URI: connectionString, Database: databaseName}
 
 	clientOpts := options.Client()
 	clientOpts.ApplyURI(cfg.URI)
-	clientOpts.SetAppName("testing-client")
+	clientOpts.SetAppName(fmt.Sprintf("%s-test-client", databaseName))
 
 	client, err := mongo.Connect(ctx, clientOpts)
 	if err != nil {

@@ -7,7 +7,7 @@ toolchain go1.22.9
 require (
 	github.com/GLCharge/otelzap v0.0.0-20230904131944-57dc7c9994a9
 	github.com/agrison/go-commons-lang v0.0.0-20240106075236-2e001e6401ef
-	github.com/eclipse/paho.golang v0.21.0
+	github.com/eclipse/paho.golang v0.22.0
 	github.com/eclipse/paho.mqtt.golang v1.5.0
 	github.com/gin-contrib/zap v1.1.4
 	github.com/gin-gonic/gin v1.10.0

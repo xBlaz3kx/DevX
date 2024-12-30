@@ -33,7 +33,7 @@ require (
 	go.opentelemetry.io/contrib/bridges/otelzap v0.8.0
 	go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin v0.57.0
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.58.0
-	go.opentelemetry.io/contrib/propagators/b3 v1.32.0
+	go.opentelemetry.io/contrib/propagators/b3 v1.33.0
 	go.opentelemetry.io/contrib/propagators/jaeger v1.33.0
 	go.opentelemetry.io/otel v1.33.0
 	go.opentelemetry.io/otel/exporters/otlp/otlplog/otlploggrpc v0.8.0

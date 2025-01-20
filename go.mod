@@ -30,21 +30,21 @@ require (
 	github.com/vearne/gin-timeout v0.2.0
 	github.com/wagslane/go-rabbitmq v0.15.0
 	go.mongodb.org/mongo-driver v1.17.1
-	go.opentelemetry.io/contrib/bridges/otelzap v0.8.0
+	go.opentelemetry.io/contrib/bridges/otelzap v0.9.0
 	go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin v0.58.0
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.58.0
 	go.opentelemetry.io/contrib/propagators/b3 v1.33.0
 	go.opentelemetry.io/contrib/propagators/jaeger v1.33.0
-	go.opentelemetry.io/otel v1.33.0
+	go.opentelemetry.io/otel v1.34.0
 	go.opentelemetry.io/otel/exporters/otlp/otlplog/otlploggrpc v0.9.0
 	go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetricgrpc v1.33.0
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace v1.33.0
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc v1.32.0
-	go.opentelemetry.io/otel/metric v1.33.0
+	go.opentelemetry.io/otel/metric v1.34.0
 	go.opentelemetry.io/otel/sdk v1.33.0
 	go.opentelemetry.io/otel/sdk/log v0.9.0
 	go.opentelemetry.io/otel/sdk/metric v1.33.0
-	go.opentelemetry.io/otel/trace v1.33.0
+	go.opentelemetry.io/otel/trace v1.34.0
 	go.uber.org/zap v1.27.0
 	google.golang.org/grpc v1.69.2
 	google.golang.org/protobuf v1.36.2
@@ -166,7 +166,7 @@ require (
 	go.opencensus.io v0.24.0 // indirect
 	go.opentelemetry.io/auto/sdk v1.1.0 // indirect
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.49.0 // indirect
-	go.opentelemetry.io/otel/log v0.9.0 // indirect
+	go.opentelemetry.io/otel/log v0.10.0 // indirect
 	go.opentelemetry.io/proto/otlp v1.4.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	golang.org/x/arch v0.13.0 // indirect

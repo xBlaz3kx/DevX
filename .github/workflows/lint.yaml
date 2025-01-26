@@ -4,12 +4,16 @@ on:
     branches:
       - main
       - master
+    paths-ignore:
+      - '**.md'
 
   pull_request:
     types: [ opened, synchronize ]
     branches:
       - main
       - master
+    paths-ignore:
+      - '**.md'
 
   workflow_dispatch:
 
@@ -32,3 +36,17 @@ jobs:
         with:
           version: v1.59
           args: --timeout 2m
+
+  buf:
+    name: Run buf
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - uses: bufbuild/buf-action@v1
+        with:
+          github_token: ${{ github.token }}

@@ -24,7 +24,7 @@ require (
 	github.com/stretchr/testify v1.10.0
 	github.com/tavsec/gin-healthcheck v1.7.2
 	github.com/testcontainers/testcontainers-go v0.35.0
-	github.com/testcontainers/testcontainers-go/modules/mongodb v0.34.0
+	github.com/testcontainers/testcontainers-go/modules/mongodb v0.35.0
 	github.com/testcontainers/testcontainers-go/modules/redis v0.35.0
 	github.com/uptrace/opentelemetry-go-extra/otelutil v0.3.2
 	github.com/vearne/gin-timeout v0.2.0

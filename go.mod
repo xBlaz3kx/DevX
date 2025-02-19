@@ -1,8 +1,6 @@
 module github.com/xBlaz3kx/DevX
 
-go 1.22.7
-
-toolchain go1.22.9
+go 1.23.0
 
 require (
 	github.com/GLCharge/otelzap v0.0.0-20230904131944-57dc7c9994a9

@@ -5,9 +5,29 @@ import (
 	"strconv"
 )
 
+type PaginationOpts struct {
+	defaultLimit int
+}
+
+type PaginationOpt func(*PaginationOpts)
+
+// WithDefaultLimit sets the default limit for pagination
+func WithDefaultLimit(defaultLimit int) PaginationOpt {
+	return func(opts *PaginationOpts) {
+		opts.defaultLimit = defaultLimit
+	}
+}
+
 // GetPaginationOptsFromContext gets the limit and offset from the context
-func GetPaginationOptsFromContext(ctx context.Context) (int, int) {
-	return getIntFromContext(ctx, "limit", 30), getIntFromContext(ctx, "offset", 0)
+func GetPaginationOptsFromContext(ctx context.Context, opts ...PaginationOpt) (int, int) {
+	paginationOpts := &PaginationOpts{
+		defaultLimit: 30,
+	}
+	for _, opt := range opts {
+		opt(paginationOpts)
+	}
+
+	return getIntFromContext(ctx, "limit", paginationOpts.defaultLimit), getIntFromContext(ctx, "offset", 0)
 }
 
 // GetIntFromContext returns the int value from the context

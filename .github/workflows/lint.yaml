@@ -29,13 +29,13 @@ jobs:
 
       - uses: actions/setup-go@v5
         with:
-          go-version: 1.21.1
+          go-version: 1.23.0
 
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v6
         with:
-          version: v1.59
-          args: --timeout 2m
+          version: v1.60
+          args: --timeout 3m
 
   buf:
     name: Run buf

@@ -34,8 +34,8 @@ jobs:
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v6
         with:
-          version: v1.59
-          args: --timeout 2m
+          version: v1.60
+          args: --timeout 3m
 
   buf:
     name: Run buf

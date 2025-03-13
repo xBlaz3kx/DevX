@@ -2,6 +2,8 @@ module github.com/xBlaz3kx/DevX
 
 go 1.23.0
 
+replace github.com/wagslane/go-rabbitmq v0.15.0 => github.com/xBlaz3kx/go-rabbitmq v0.16.0
+
 require (
 	github.com/GLCharge/otelzap v0.0.0-20230904131944-57dc7c9994a9
 	github.com/agrison/go-commons-lang v0.0.0-20240106075236-2e001e6401ef

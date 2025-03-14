@@ -469,6 +469,7 @@ github.com/vearne/gin-timeout v0.2.0 h1:KobNPr4YSMtrucHH+3Ce6aE/s99gxMLynu+IktWX
 github.com/vearne/gin-timeout v0.2.0/go.mod h1:BKCWwia+RoBi1gv+RS4FtVrcM7bVhNkfUg+jTvtHa1A=
 github.com/wagslane/go-rabbitmq v0.15.0 h1:KibShYLLeDYc3C5fnx+BjiHJLJdL6D5/BysgcRJknRE=
 github.com/wagslane/go-rabbitmq v0.15.0/go.mod h1:ts7Di9tkLMyI0Z6/aA6T78zQkKDNrtApVis1qqMjqu4=
+github.com/xBlaz3kx/go-rabbitmq v0.16.0/go.mod h1:CjOsbgGOI6P4LhE4QFGRhPkbicTdBRLWTFBpIoLh5Gs=
 github.com/xdg-go/pbkdf2 v1.0.0 h1:Su7DPu48wXMwC3bs7MCNG+z4FhcyEuz5dlvchbq0B0c=
 github.com/xdg-go/pbkdf2 v1.0.0/go.mod h1:jrpuAogTd400dnrH08LKmI/xc1MbPOebTwRqcT5RDeI=
 github.com/xdg-go/scram v1.1.2 h1:FHX5I5B4i4hKRVRBCFRxq1iQRej7WO3hhBuJf+UUySY=

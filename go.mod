@@ -1,6 +1,7 @@
 module github.com/xBlaz3kx/DevX
 
 go 1.23.0
+
 require (
 	github.com/GLCharge/otelzap v0.0.0-20230904131944-57dc7c9994a9
 	github.com/agrison/go-commons-lang v0.0.0-20240106075236-2e001e6401ef
@@ -41,7 +42,7 @@ require (
 	go.opentelemetry.io/otel/metric v1.35.0
 	go.opentelemetry.io/otel/sdk v1.35.0
 	go.opentelemetry.io/otel/sdk/log v0.11.0
-	go.opentelemetry.io/otel/sdk/metric v1.34.0
+	go.opentelemetry.io/otel/sdk/metric v1.35.0
 	go.opentelemetry.io/otel/trace v1.35.0
 	go.uber.org/zap v1.27.0
 	google.golang.org/grpc v1.70.0

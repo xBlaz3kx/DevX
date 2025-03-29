@@ -6,7 +6,7 @@ import (
 
 	influxdb2 "github.com/influxdata/influxdb-client-go/v2"
 	"github.com/testcontainers/testcontainers-go"
-	"github.com/testcontainers/testcontainers-go/wait"
+	"github.com/testcontainers/testcontainers-go/modules/influxdb"
 )
 
 const (
@@ -28,32 +28,24 @@ type InfluxContainer struct {
 // "DOCKER_INFLUXDB_INIT_ORG":          "dev",
 // "DOCKER_INFLUXDB_INIT_BUCKET":       "integration",
 // "DOCKER_INFLUXDB_INIT_ADMIN_TOKEN":  "adminToken",
-func NewInfluxContainer(ctx context.Context, networkName string) (*InfluxContainer, error) {
-	req := testcontainers.ContainerRequest{
-		Name:         "influxdb",
-		Image:        "influxdb:2.7.8",
-		ExposedPorts: []string{"8086/tcp"},
-		WaitingFor:   wait.ForHTTP("/health"),
-		Networks:     []string{"host"},
-		Env: map[string]string{
-			"DOCKER_INFLUXDB_INIT_MODE":         "setup",
-			"DOCKER_INFLUXDB_INIT_USERNAME":     InfluxUsername,
-			"DOCKER_INFLUXDB_INIT_PASSWORD":     InfluxPassword,
-			"DOCKER_INFLUXDB_INIT_ORG":          InfluxOrg,
-			"DOCKER_INFLUXDB_INIT_BUCKET":       InfluxBucket,
-			"DOCKER_INFLUXDB_INIT_ADMIN_TOKEN":  InfluxToken,
-			"DOCKER_INFLUXDB_INIT_AUTH_ENABLED": "true",
-		},
-	}
-	container, err := testcontainers.GenericContainer(ctx, testcontainers.GenericContainerRequest{
-		ContainerRequest: req,
-		Started:          true,
-	})
+func NewInfluxContainer(ctx context.Context, opts ...testcontainers.ContainerCustomizer) (*InfluxContainer, error) {
+	// Append env overrides to the options
+	opts = append(opts, testcontainers.WithEnv(map[string]string{
+		"DOCKER_INFLUXDB_INIT_MODE":         "setup",
+		"DOCKER_INFLUXDB_INIT_USERNAME":     InfluxUsername,
+		"DOCKER_INFLUXDB_INIT_PASSWORD":     InfluxPassword,
+		"DOCKER_INFLUXDB_INIT_ORG":          InfluxOrg,
+		"DOCKER_INFLUXDB_INIT_BUCKET":       InfluxBucket,
+		"DOCKER_INFLUXDB_INIT_ADMIN_TOKEN":  InfluxToken,
+		"DOCKER_INFLUXDB_INIT_AUTH_ENABLED": "true",
+	}))
+
+	influxdbContainer, err := influxdb.Run(ctx, "influxdb:2.7.11", opts...)
 	if err != nil {
 		return nil, err
 	}
 
-	return &InfluxContainer{Container: container}, nil
+	return &InfluxContainer{Container: influxdbContainer}, nil
 }
 
 func (i *InfluxContainer) GetConnectionString(ctx context.Context) (string, error) {

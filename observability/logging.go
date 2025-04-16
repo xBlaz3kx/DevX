@@ -3,9 +3,9 @@ package observability
 import (
 	"context"
 	"os"
+	"time"
 
 	"github.com/GLCharge/otelzap"
-	"github.com/spf13/viper"
 	"github.com/xBlaz3kx/DevX/tls"
 	oZap "go.opentelemetry.io/contrib/bridges/otelzap"
 	"go.opentelemetry.io/otel/exporters/otlp/otlplog/otlploggrpc"
@@ -98,15 +98,11 @@ func NewLogging(config LogConfig) *Logging {
 		}
 
 		// Setup Otel logger
-		env := viper.GetString("environment")
-
-		var processor otelLog.Processor
-		if env == "production" {
-			processor = otelLog.NewSimpleProcessor(exporter)
-		} else {
-			processor = otelLog.NewBatchProcessor(exporter)
-		}
-
+		processor := otelLog.NewBatchProcessor(
+			exporter,
+			otelLog.WithExportMaxBatchSize(1000),
+			otelLog.WithExportInterval(time.Second*5),
+		)
 		logProvider := otelLog.NewLoggerProvider(otelLog.WithProcessor(processor))
 
 		// Override the core

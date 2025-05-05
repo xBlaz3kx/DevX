@@ -461,8 +461,8 @@ github.com/testcontainers/testcontainers-go v0.37.0 h1:L2Qc0vkTw2EHWQ08djon0D2uw
 github.com/testcontainers/testcontainers-go v0.37.0/go.mod h1:QPzbxZhQ6Bclip9igjLFj6z0hs01bU8lrl2dHQmgFGM=
 github.com/testcontainers/testcontainers-go/modules/influxdb v0.36.0 h1:kjKhtfl/grrM6BLp0WvRhUFVEP1vVcWCTfUesU7H3F4=
 github.com/testcontainers/testcontainers-go/modules/influxdb v0.36.0/go.mod h1:R2o8N79WW26wA8yJxUBaWpaM3aIOwVqRw9anDD1mTsc=
-github.com/testcontainers/testcontainers-go/modules/mongodb v0.36.0 h1:HDW6rknSqci/154rpEGNL8VrKJxXmApxcG++VedQKTE=
-github.com/testcontainers/testcontainers-go/modules/mongodb v0.36.0/go.mod h1:RhguDt49jCUepedF4zBRJwb66VWWvSg5YQ+nQNff370=
+github.com/testcontainers/testcontainers-go/modules/mongodb v0.37.0 h1:drGy4LJOVkIKpKGm1YKTfVzb1qRhN/konVpmuUphq0k=
+github.com/testcontainers/testcontainers-go/modules/mongodb v0.37.0/go.mod h1:e9/4dGJfSZW59/kXGf/ksrEvA+BqP/daax0Usp2cpsM=
 github.com/testcontainers/testcontainers-go/modules/rabbitmq v0.35.0 h1:nFxuSjhASdDOIcXwasRfI9ZQOIfzsw3+VLOWr521OVg=
 github.com/testcontainers/testcontainers-go/modules/rabbitmq v0.35.0/go.mod h1:xuazU9BNcShAHlgf48JQ0Ef348EF28kSPp9rIHtWzPg=
 github.com/testcontainers/testcontainers-go/modules/redis v0.36.0 h1:Z+6APQ0DjQP8Kj5Fu+lkAlH2v7f5QkAQyyjnf1Kq8sw=

@@ -27,7 +27,7 @@ require (
 	github.com/testcontainers/testcontainers-go v0.37.0
 	github.com/testcontainers/testcontainers-go/modules/influxdb v0.36.0
 	github.com/testcontainers/testcontainers-go/modules/mongodb v0.37.0
-	github.com/testcontainers/testcontainers-go/modules/redis v0.36.0
+	github.com/testcontainers/testcontainers-go/modules/redis v0.37.0
 	github.com/uptrace/opentelemetry-go-extra/otelutil v0.3.2
 	github.com/vearne/gin-timeout v0.2.0
 	github.com/wagslane/go-rabbitmq v0.15.0
@@ -121,6 +121,7 @@ require (
 	github.com/magiconair/properties v1.8.10 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
+	github.com/mdelapenya/tlscert v0.2.0 // indirect
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/moby/docker-image-spec v1.3.1 // indirect

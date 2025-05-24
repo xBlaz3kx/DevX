@@ -1,6 +1,6 @@
 # DevX
 
-DevX is an library for common functions and utilities used in the development.
+DevX is a library for common functions and utilities used in microservice development.
 
 ## Installation
 
@@ -26,5 +26,8 @@ func main() {
 
 ## Contributing
 
-We appreciate your help! Please see [CONTRIBUTING](CONTRIBUTING.md) for details on how to contribute to this internal
-library.
+We appreciate your help! Please see [CONTRIBUTING](CONTRIBUTING.md) for details on how to contribute to this library.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE.md) file for details.

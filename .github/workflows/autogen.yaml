@@ -1,5 +1,12 @@
 name: Autogenerate
 on:
+  push:
+    branches:
+      - main
+    paths:
+      - '**/*.go'
+      - '.mockery.yaml'
+
   # Note: When testing with nektos/act, the workflow_dispatch does not work as of version 0.2.63
   workflow_dispatch:
 
@@ -9,13 +16,14 @@ on:
       - '.mockery.yaml'
 
 jobs:
-  mockery:
+  mocks:
     name: Generate mocks
     runs-on: ubuntu-latest
 
     # Permissions are needed to push the changes back to the repository
     permissions:
       contents: write
+      pull-requests: write
 
     steps:
       - name: Checkout code
@@ -37,12 +45,20 @@ jobs:
       - name: Generate mocks
         run: mockery
 
-        # Commit all changed files back to the repository
-      - uses: stefanzweifel/git-auto-commit-action@v5
-        #with:
-        #  commit_message: [ Autogen ] Generated mocks
-        #  # Mockery can generate new files, so we need to add them to the commit as well
-        #  add_options: '$(git ls-files -o --exclude-standard)'
-        #  file_pattern: '*.go' # Only commit changes to Go files
-        #  # Only create a branch when the workflow is triggered manually
-        #  create_branch: ${{ github.event_name == 'workflow_dispatch' }}
+      - name: Push the generated code
+        uses: stefanzweifel/git-auto-commit-action@v5
+        if: github.event_name == 'pull_request' # Only push if this is a PR
+        with:
+          commit_message: "[autogen] generated mocks"
+
+      - name: Create a PR with the generated code
+        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "[autogen] (re)generated mocks"
+          title: "[gen] Upserted mocks"
+          body: "Regenerated mocks"
+          branch: "feat/gen-mocks-${{ github.sha }}"
+          base: main
+          labels: mocks, autogen

@@ -10,7 +10,7 @@ require (
 	github.com/eclipse/paho.golang v0.22.0
 	github.com/eclipse/paho.mqtt.golang v1.5.0
 	github.com/gin-contrib/zap v1.1.5
-	github.com/gin-gonic/gin v1.10.0
+	github.com/gin-gonic/gin v1.10.1
 	github.com/go-playground/validator/v10 v10.26.0
 	github.com/google/uuid v1.6.0
 	github.com/grafana/otel-profiling-go v0.5.1
@@ -18,12 +18,12 @@ require (
 	github.com/grpc-ecosystem/go-grpc-middleware v1.4.0
 	github.com/influxdata/influxdb-client-go/v2 v2.14.0
 	github.com/pkg/errors v0.9.1
-	github.com/redis/go-redis/v9 v9.8.0
+	github.com/redis/go-redis/v9 v9.9.0
 	github.com/samber/lo v1.50.0
 	github.com/spf13/viper v1.20.1
 	github.com/spf13/viper/remote v1.20.1
 	github.com/stretchr/testify v1.10.0
-	github.com/tavsec/gin-healthcheck v1.7.6
+	github.com/tavsec/gin-healthcheck v1.7.7
 	github.com/testcontainers/testcontainers-go v0.37.0
 	github.com/testcontainers/testcontainers-go/modules/influxdb v0.37.0
 	github.com/testcontainers/testcontainers-go/modules/mongodb v0.37.0
@@ -178,7 +178,7 @@ require (
 	golang.org/x/exp v0.0.0-20230905200255-921286631fa9 // indirect
 	golang.org/x/net v0.38.0 // indirect
 	golang.org/x/oauth2 v0.26.0 // indirect
-	golang.org/x/sync v0.13.0 // indirect
+	golang.org/x/sync v0.14.0 // indirect
 	golang.org/x/sys v0.32.0 // indirect
 	golang.org/x/text v0.24.0 // indirect
 	golang.org/x/time v0.8.0 // indirect

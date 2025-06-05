@@ -52,8 +52,8 @@ func (n *noopObservability) Metrics() *Metrics {
 func (n *noopObservability) SetupGinMiddleware(router *gin.Engine, opts ...MetricMiddlewareOpt) {
 }
 
-func (n *noopObservability) WithSpanKind(spanKind trace.SpanKind) *Impl {
-	return &Impl{}
+func (n *noopObservability) WithSpanKind(spanKind trace.SpanKind) Observability {
+	return n
 }
 
 func (n *noopObservability) IsTracingEnabled() bool {

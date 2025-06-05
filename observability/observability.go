@@ -52,7 +52,7 @@ type Observability interface {
 	Log() *otelzap.Logger
 	Metrics() *Metrics
 	SetupGinMiddleware(router *gin.Engine, opts ...MetricMiddlewareOpt)
-	WithSpanKind(spanKind trace.SpanKind) *Impl
+	WithSpanKind(spanKind trace.SpanKind) Observability
 	IsTracingEnabled() bool
 	IsProfilingEnabled() bool
 	AreMetricsEnabled() bool
@@ -237,7 +237,7 @@ func (obs *Impl) clone() *Impl {
 }
 
 // WithSpanKind returns a copy of the observability instance with the given span type
-func (obs *Impl) WithSpanKind(spanKind trace.SpanKind) *Impl {
+func (obs *Impl) WithSpanKind(spanKind trace.SpanKind) Observability {
 	o := obs.clone()
 	o.spanKind = spanKind
 	return o

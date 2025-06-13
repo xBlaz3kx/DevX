@@ -38,13 +38,13 @@ require (
 	go.opentelemetry.io/contrib/propagators/b3 v1.36.0
 	go.opentelemetry.io/contrib/propagators/jaeger v1.35.0
 	go.opentelemetry.io/otel v1.36.0
-	go.opentelemetry.io/otel/exporters/otlp/otlplog/otlploggrpc v0.11.0
+	go.opentelemetry.io/otel/exporters/otlp/otlplog/otlploggrpc v0.12.2
 	go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetricgrpc v1.35.0
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace v1.36.0
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc v1.34.0
 	go.opentelemetry.io/otel/metric v1.36.0
 	go.opentelemetry.io/otel/sdk v1.36.0
-	go.opentelemetry.io/otel/sdk/log v0.11.0
+	go.opentelemetry.io/otel/sdk/log v0.12.2
 	go.opentelemetry.io/otel/sdk/metric v1.36.0
 	go.opentelemetry.io/otel/trace v1.36.0
 	go.uber.org/zap v1.27.0
@@ -67,6 +67,7 @@ require (
 	github.com/bytedance/sonic v1.13.2 // indirect
 	github.com/bytedance/sonic/loader v0.2.4 // indirect
 	github.com/cenkalti/backoff/v4 v4.3.0 // indirect
+	github.com/cenkalti/backoff/v5 v5.0.2 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/cloudwego/base64x v0.1.5 // indirect
 	github.com/containerd/log v0.1.0 // indirect
@@ -86,7 +87,7 @@ require (
 	github.com/fsnotify/fsnotify v1.8.0 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.9 // indirect
 	github.com/gin-contrib/sse v1.1.0 // indirect
-	github.com/go-logr/logr v1.4.2 // indirect
+	github.com/go-logr/logr v1.4.3 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/go-ole/go-ole v1.2.6 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
@@ -170,7 +171,8 @@ require (
 	go.opencensus.io v0.24.0 // indirect
 	go.opentelemetry.io/auto/sdk v1.1.0 // indirect
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.54.0 // indirect
-	go.opentelemetry.io/otel/log v0.11.0 // indirect
+	go.opentelemetry.io/otel/log v0.12.2 // indirect
+	go.opentelemetry.io/otel/log/logtest v0.0.0-20250612170235-a4055c21bce3 // indirect
 	go.opentelemetry.io/proto/otlp v1.6.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	golang.org/x/arch v0.17.0 // indirect
@@ -184,7 +186,7 @@ require (
 	golang.org/x/time v0.8.0 // indirect
 	google.golang.org/api v0.215.0 // indirect
 	google.golang.org/genproto v0.0.0-20241118233622-e639e219e697 // indirect
-	google.golang.org/genproto/googleapis/api v0.0.0-20250428153025-10db94c68c34 // indirect
+	google.golang.org/genproto/googleapis/api v0.0.0-20250519155744-55703ea1f237 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20250519155744-55703ea1f237 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

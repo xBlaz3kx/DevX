@@ -46,7 +46,7 @@ jobs:
         run: mockery
 
       - name: Push the generated code
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v6
         if: github.event_name == 'pull_request' # Only push if this is a PR
         with:
           commit_message: "[autogen] generated mocks"

@@ -34,7 +34,7 @@ require (
 	go.mongodb.org/mongo-driver v1.17.4
 	go.opentelemetry.io/contrib/bridges/otelzap v0.11.0
 	go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin v0.62.0
-	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.61.0
+	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.62.0
 	go.opentelemetry.io/contrib/propagators/b3 v1.37.0
 	go.opentelemetry.io/contrib/propagators/jaeger v1.37.0
 	go.opentelemetry.io/otel v1.37.0
@@ -190,6 +190,6 @@ require (
 	google.golang.org/api v0.215.0 // indirect
 	google.golang.org/genproto v0.0.0-20241118233622-e639e219e697 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20250528174236-200df99c418a // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20250528174236-200df99c418a // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20250603155806-513f23925822 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

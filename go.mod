@@ -32,7 +32,7 @@ require (
 	github.com/vearne/gin-timeout v0.2.2
 	github.com/wagslane/go-rabbitmq v0.15.0
 	go.mongodb.org/mongo-driver v1.17.4
-	go.opentelemetry.io/contrib/bridges/otelzap v0.11.0
+	go.opentelemetry.io/contrib/bridges/otelzap v0.12.0
 	go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin v0.62.0
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.62.0
 	go.opentelemetry.io/contrib/propagators/b3 v1.37.0
@@ -174,8 +174,7 @@ require (
 	go.opencensus.io v0.24.0 // indirect
 	go.opentelemetry.io/auto/sdk v1.1.0 // indirect
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.54.0 // indirect
-	go.opentelemetry.io/otel/log v0.12.2 // indirect
-	go.opentelemetry.io/otel/log/logtest v0.0.0-20250612170235-a4055c21bce3 // indirect
+	go.opentelemetry.io/otel/log v0.13.0 // indirect
 	go.opentelemetry.io/proto/otlp v1.7.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	golang.org/x/arch v0.18.0 // indirect

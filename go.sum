@@ -475,8 +475,8 @@ github.com/testcontainers/testcontainers-go/modules/mongodb v0.38.0 h1:A+YGYRoNL
 github.com/testcontainers/testcontainers-go/modules/mongodb v0.38.0/go.mod h1:4PMThrMlJpuUqLG+sCca3pWJKuReeQGioszuESf+uO0=
 github.com/testcontainers/testcontainers-go/modules/rabbitmq v0.37.0 h1:JiPjs8fV3qpHWDKyNEhA4Phtjwduj/bgd14Ltz9fzy0=
 github.com/testcontainers/testcontainers-go/modules/rabbitmq v0.37.0/go.mod h1:5tThy7LY0XMUQCR72cWfqPstL3lxBiG6GVYRhwbj8ZQ=
-github.com/testcontainers/testcontainers-go/modules/redis v0.37.0 h1:9HIY28I9ME/Zmb+zey1p/I1mto5+5ch0wLX+nJdOsQ4=
-github.com/testcontainers/testcontainers-go/modules/redis v0.37.0/go.mod h1:Abu9g/25Qv+FkYVx3U4Voaynou1c+7D0HIhaQJXvk6E=
+github.com/testcontainers/testcontainers-go/modules/redis v0.38.0 h1:289pn0BFmGqDrd6BrImZAprFef9aaPZacx07YOQaPV4=
+github.com/testcontainers/testcontainers-go/modules/redis v0.38.0/go.mod h1:EcKPWRzOglnQfYe+ekA8RPEIWSNJTGwaC5oE5bQV+D0=
 github.com/tklauser/go-sysconf v0.3.12 h1:0QaGUFOdQaIVdPgfITYzaTegZvdCjmYO52cSFAEVmqU=
 github.com/tklauser/go-sysconf v0.3.12/go.mod h1:Ho14jnntGE1fpdOqQEEaiKRpvIavV0hSfmBq8nJbHYI=
 github.com/tklauser/numcpus v0.6.1 h1:ng9scYS7az0Bk4OZLvrNXNSAO2Pxr1XXRAPyjhIx+Fk=

@@ -22,7 +22,7 @@ require (
 	github.com/samber/lo v1.51.0
 	github.com/spf13/viper v1.20.1
 	github.com/spf13/viper/remote v1.20.1
-	github.com/stretchr/testify v1.10.0
+	github.com/stretchr/testify v1.11.1
 	github.com/tavsec/gin-healthcheck v1.7.8
 	github.com/testcontainers/testcontainers-go v0.38.0
 	github.com/testcontainers/testcontainers-go/modules/influxdb v0.37.0

@@ -490,8 +490,8 @@ github.com/ugorji/go/codec v1.3.0 h1:Qd2W2sQawAfG8XSvzwhBeoGq71zXOC/Q1E9y/wUcsUA
 github.com/ugorji/go/codec v1.3.0/go.mod h1:pRBVtBSKl77K30Bv8R2P+cLSGaTtex6fsA2Wjqmfxj4=
 github.com/uptrace/opentelemetry-go-extra/otelutil v0.3.2 h1:3/aHKUq7qaFMWxyQV0W2ryNgg8x8rVeKVA20KJUkfS0=
 github.com/uptrace/opentelemetry-go-extra/otelutil v0.3.2/go.mod h1:Zit4b8AQXaXvA68+nzmbyDzqiyFRISyw1JiD5JqUBjw=
-github.com/vearne/gin-timeout v0.2.2 h1:reg8i8Rm+46IsBtuiSoJD3WnzuWwNgeosPOVZi41w+8=
-github.com/vearne/gin-timeout v0.2.2/go.mod h1:BKCWwia+RoBi1gv+RS4FtVrcM7bVhNkfUg+jTvtHa1A=
+github.com/vearne/gin-timeout v0.2.3 h1:C67/Y7IA6kb6cUbp8SEkYnIuP+FCc6nFD1sWQih2CNg=
+github.com/vearne/gin-timeout v0.2.3/go.mod h1:U91+iMIf1Ic5GmaNdhFFeCZVFMPuSUK7Q3CwNeMPwhA=
 github.com/wagslane/go-rabbitmq v0.15.0 h1:KibShYLLeDYc3C5fnx+BjiHJLJdL6D5/BysgcRJknRE=
 github.com/wagslane/go-rabbitmq v0.15.0/go.mod h1:ts7Di9tkLMyI0Z6/aA6T78zQkKDNrtApVis1qqMjqu4=
 github.com/xdg-go/pbkdf2 v1.0.0 h1:Su7DPu48wXMwC3bs7MCNG+z4FhcyEuz5dlvchbq0B0c=

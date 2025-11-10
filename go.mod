@@ -29,7 +29,7 @@ require (
 	github.com/testcontainers/testcontainers-go/modules/mongodb v0.38.0
 	github.com/testcontainers/testcontainers-go/modules/redis v0.38.0
 	github.com/uptrace/opentelemetry-go-extra/otelutil v0.3.2
-	github.com/vearne/gin-timeout v0.2.2
+	github.com/vearne/gin-timeout v0.2.3
 	github.com/wagslane/go-rabbitmq v0.15.0
 	go.mongodb.org/mongo-driver v1.17.6
 	go.opentelemetry.io/contrib/bridges/otelzap v0.12.0

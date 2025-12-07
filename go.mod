@@ -32,7 +32,7 @@ require (
 	github.com/vearne/gin-timeout v0.2.3
 	github.com/wagslane/go-rabbitmq v0.15.0
 	go.mongodb.org/mongo-driver v1.17.6
-	go.opentelemetry.io/contrib/bridges/otelzap v0.12.0
+	go.opentelemetry.io/contrib/bridges/otelzap v0.13.0
 	go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin v0.63.0
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.63.0
 	go.opentelemetry.io/contrib/propagators/b3 v1.38.0

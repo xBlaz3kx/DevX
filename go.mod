@@ -23,7 +23,7 @@ require (
 	github.com/spf13/viper v1.21.0
 	github.com/spf13/viper/remote v1.20.1
 	github.com/stretchr/testify v1.11.1
-	github.com/tavsec/gin-healthcheck v1.7.11
+	github.com/tavsec/gin-healthcheck v1.7.12
 	github.com/testcontainers/testcontainers-go v0.40.0
 	github.com/testcontainers/testcontainers-go/modules/influxdb v0.40.0
 	github.com/testcontainers/testcontainers-go/modules/mongodb v0.38.0

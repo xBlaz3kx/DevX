@@ -453,8 +453,8 @@ github.com/stretchr/testify v1.11.1 h1:7s2iGBzp5EwR7/aIZr8ao5+dra3wiQyKjjFuvgVKu
 github.com/stretchr/testify v1.11.1/go.mod h1:wZwfW3scLgRK+23gO65QZefKpKQRnfz6sD981Nm4B6U=
 github.com/subosito/gotenv v1.6.0 h1:9NlTDc1FTs4qu0DDq7AEtTPNw6SVm7uBMsUCUjABIf8=
 github.com/subosito/gotenv v1.6.0/go.mod h1:Dk4QP5c2W3ibzajGcXpNraDfq2IrhjMIvMSWPKKo0FU=
-github.com/tavsec/gin-healthcheck v1.7.12 h1:pWuirsbgwmA4b3Kigc+VxWPUQtwatX+rsAGzvXW1LcA=
-github.com/tavsec/gin-healthcheck v1.7.12/go.mod h1:VvGvBbs6digZ7oaZoq1qJGg3zRSVmaIDONpvBaIwVVU=
+github.com/tavsec/gin-healthcheck v1.7.13 h1:amM1eYvUlT31FM0t2HiwnP1mrjpGJvvG9Ohfmc/9NA0=
+github.com/tavsec/gin-healthcheck v1.7.13/go.mod h1:M+HD+KjOPMgNFcdcS//hYvaJq3cx42AdSnubPk4MMm0=
 github.com/testcontainers/testcontainers-go v0.40.0 h1:pSdJYLOVgLE8YdUY2FHQ1Fxu+aMnb6JfVz1mxk7OeMU=
 github.com/testcontainers/testcontainers-go v0.40.0/go.mod h1:FSXV5KQtX2HAMlm7U3APNyLkkap35zNLxukw9oBi/MY=
 github.com/testcontainers/testcontainers-go/modules/influxdb v0.40.0 h1:l5ak1HLly23PT3tdNp/7VkRZBfahXwzur/AphXEh/U0=
@@ -501,8 +501,8 @@ go.etcd.io/etcd/client/v2 v2.305.22 h1:FedDsGxor5iE9muhXm1CgE/TiSVOtgyB5+NYCHPzA
 go.etcd.io/etcd/client/v2 v2.305.22/go.mod h1:VP7+1hEKyfGPuRdDmtT8GjM2HcVCKVlGmxfv3NwmrII=
 go.etcd.io/etcd/client/v3 v3.6.4 h1:YOMrCfMhRzY8NgtzUsHl8hC2EBSnuqbR3dh84Uryl7A=
 go.etcd.io/etcd/client/v3 v3.6.4/go.mod h1:jaNNHCyg2FdALyKWnd7hxZXZxZANb0+KGY+YQaEMISo=
-go.mongodb.org/mongo-driver v1.17.6 h1:87JUG1wZfWsr6rIz3ZmpH90rL5tea7O3IHuSwHUpsss=
-go.mongodb.org/mongo-driver v1.17.6/go.mod h1:Hy04i7O2kC4RS06ZrhPRqj/u4DTYkFDAAccj+rVKqgQ=
+go.mongodb.org/mongo-driver v1.17.7 h1:a9w+U3Vt67eYzcfq3k/OAv284/uUUkL0uP75VE5rCOU=
+go.mongodb.org/mongo-driver v1.17.7/go.mod h1:Hy04i7O2kC4RS06ZrhPRqj/u4DTYkFDAAccj+rVKqgQ=
 go.mongodb.org/mongo-driver/v2 v2.3.0 h1:sh55yOXA2vUjW1QYw/2tRlHSQViwDyPnW61AwpZ4rtU=
 go.mongodb.org/mongo-driver/v2 v2.3.0/go.mod h1:jHeEDJHJq7tm6ZF45Issun9dbogjfnPySb1vXA7EeAI=
 go.opentelemetry.io/auto/sdk v1.2.1 h1:jXsnJ4Lmnqd11kwkBV2LgLoFMZKizbCi5fNZ/ipaZ64=

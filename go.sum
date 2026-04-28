@@ -456,8 +456,8 @@ github.com/tavsec/gin-healthcheck v1.7.15 h1:Mlz1UOZG5fADElq/AJvg32l4mj++MSfGCTM
 github.com/tavsec/gin-healthcheck v1.7.15/go.mod h1:f95OQV5TUXE3dqddau9edArwxivP69i0b/4xwUQfKPg=
 github.com/testcontainers/testcontainers-go v0.42.0 h1:He3IhTzTZOygSXLJPMX7n44XtK+qhjat1nI9cneBbUY=
 github.com/testcontainers/testcontainers-go v0.42.0/go.mod h1:vZjdY1YmUA1qEForxOIOazfsrdyORJAbhi0bp8plN30=
-github.com/testcontainers/testcontainers-go/modules/influxdb v0.41.0 h1:1u7XE9Z8qQeFMkcYxI1pqKxdji0Lt9PnvMWHtOd+O5A=
-github.com/testcontainers/testcontainers-go/modules/influxdb v0.41.0/go.mod h1:ziQPHwIjBbXWtUWZepKaiQPJ9syMW7h2s9UFdp5DJ5E=
+github.com/testcontainers/testcontainers-go/modules/influxdb v0.42.0 h1:sQFN2Jb+sApQTft6Yqrn++U7lbsnGfQZ+GxaQ+yu0qU=
+github.com/testcontainers/testcontainers-go/modules/influxdb v0.42.0/go.mod h1:Ssge6gLja74aGiub2KSz0jsbA6NkcO7cZrYgjHKdM0w=
 github.com/testcontainers/testcontainers-go/modules/mongodb v0.42.0 h1:jX10Aprgf1L+Ov+KxcheZ/1JXdiJ/3wdevfWFSkxm6s=
 github.com/testcontainers/testcontainers-go/modules/mongodb v0.42.0/go.mod h1:Ph+xH0hAC6djPFTjPgLa3VmSfE4h82kzVIKxTj3n2o4=
 github.com/testcontainers/testcontainers-go/modules/rabbitmq v0.42.0 h1:Psvaug2WredXSbKfw5dBOgqlGe8L8jxPAQYuRp5H7Rs=

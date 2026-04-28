@@ -23,7 +23,7 @@ require (
 	github.com/stretchr/testify v1.11.1
 	github.com/tavsec/gin-healthcheck v1.7.15
 	github.com/testcontainers/testcontainers-go v0.42.0
-	github.com/testcontainers/testcontainers-go/modules/influxdb v0.41.0
+	github.com/testcontainers/testcontainers-go/modules/influxdb v0.42.0
 	github.com/testcontainers/testcontainers-go/modules/mongodb v0.42.0
 	github.com/testcontainers/testcontainers-go/modules/redis v0.42.0
 	github.com/uptrace/opentelemetry-go-extra/otelutil v0.3.2

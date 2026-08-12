@@ -1,6 +1,6 @@
 module github.com/xBlaz3kx/DevX
 
-go 1.25.0
+go 1.26.0
 
 require (
 	github.com/GLCharge/otelzap v0.0.0-20230904131944-57dc7c9994a9
@@ -28,7 +28,7 @@ require (
 	github.com/testcontainers/testcontainers-go/modules/redis v0.43.0
 	github.com/uptrace/opentelemetry-go-extra/otelutil v0.3.2
 	github.com/vearne/gin-timeout v0.2.3
-	github.com/wagslane/go-rabbitmq v0.15.0
+	github.com/wagslane/go-rabbitmq v0.16.1
 	go.mongodb.org/mongo-driver v1.17.9
 	go.opentelemetry.io/contrib/bridges/otelzap v0.19.0
 	go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin v0.69.0
